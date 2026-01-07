@@ -24,7 +24,7 @@ export default function RootLayout({
 }>): React.JSX.Element {
     return (
         <html lang='en'>
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+            <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
                 {children}
             </body>
         </html>
