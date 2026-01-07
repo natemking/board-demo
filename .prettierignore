@@ -1,0 +1,61 @@
+# Ignore artifacts:
+build
+coverage
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+.next/
+/out/
+
+# production
+build
+
+# generated files
+/packages/api/generated
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# local env files
+.env*.local
+.env*.production
+
+# vercel
+/.vercel
+
+# turbo
+/.turbo
+
+# yarn
+/.yarn
+
+# husky
+/.husky
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+/README.md
+
+
+.github/*
+.vscode/*
+
+*.yml
+*.yaml
+*.mjs
