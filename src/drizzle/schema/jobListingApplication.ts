@@ -1,0 +1,32 @@
+import { integer, pgEnum, pgTable, primaryKey, text, uuid, varchar } from 'drizzle-orm/pg-core';
+import { JobListingTable } from 'schema/jobListing';
+import { UserTable } from 'schema/user';
+import { createdAt, updatedAt } from 'drizzle/schemaHelpers';
+
+export const applicationStages = [
+    'denied',
+    'applied',
+    'interested',
+    'interviewed',
+    'hired',
+] as const;
+export type ApplicationsStage = (typeof applicationStages)[number];
+export const applicationStageEnum = pgEnum('job_listing_application_stages', applicationStages);
+
+export const JobListingApplicationTable = pgTable(
+    'job_listing_applications',
+    {
+        jobListingId: uuid()
+            .references(() => JobListingTable.id, { onDelete: 'cascade' })
+            .notNull(),
+        userId: varchar()
+            .references(() => UserTable.id, { onDelete: 'cascade' })
+            .notNull(),
+        coverLetter: text(),
+        rating: integer(),
+        stage: applicationStageEnum().notNull().default('applied'),
+        createdAt,
+        updatedAt,
+    },
+    table => [primaryKey({ columns: [table.jobListingId, table.userId] })]
+);

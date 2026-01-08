@@ -18,10 +18,12 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",  
     "paths": {
-      "/*": ["./src/*"],
-      "lib/*": ["./src/lib/*"],
-      "env/*": ["./src/lib/env/*"]
+      "lib/*": ["src/lib/*"],
+      "env/*": ["src/lib/env/*"],
+      "drizzle/*": ["src/drizzle/*"],
+      "schema/*": ["src/drizzle/schema/*"]
     }
   },
   "include": [
