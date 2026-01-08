@@ -469,6 +469,7 @@ const eslintConfig = defineConfig([
                     // Ignore Next app router file names
                     ignore: [
                         /^(?<fileNames>error|global-error|layout|loading|not-found|page|use.*)\.(?<fileTypes>jsx|tsx)$/i,
+                        /src\/ui\/shadcn\//,
                     ],
                 },
             ],
@@ -495,12 +496,15 @@ const eslintConfig = defineConfig([
         rules: {
             '@typescript-eslint/consistent-type-definitions': 'off',
             '@typescript-eslint/explicit-function-return-type': 'off',
+            '@typescript-eslint/no-confusing-void-expression': 'off',
             '@typescript-eslint/no-empty-interface': 'off',
             '@typescript-eslint/no-empty-object-type': 'off',
+            '@typescript-eslint/no-shadow': 'off',
             '@typescript-eslint/no-unnecessary-condition': 'off',
             '@typescript-eslint/restrict-template-expressions': 'off',
             'jsx-a11y/heading-has-content': 'off',
             'import/order': 'off',
+            'no-param-reassign': 'off',
             'react/jsx-sort-props': 'off',
             'react/no-unknown-property': [
                 'error',
