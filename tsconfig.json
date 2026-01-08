@@ -25,7 +25,8 @@
       "drizzle/*": ["src/drizzle/*"],
       "schema/*": ["src/drizzle/schema/*"],
       "components/*": ["src/ui/components"],
-      "shadcn/*": ["src/ui/components/shadcn/*"] 
+      "shadcn/*": ["src/ui/components/shadcn/*"],
+      "types": ["src/types"]
     }
   },
   "include": [
