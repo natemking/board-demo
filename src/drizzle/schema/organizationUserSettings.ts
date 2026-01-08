@@ -1,7 +1,8 @@
 import { boolean, integer, pgTable, primaryKey, varchar } from 'drizzle-orm/pg-core';
 import { createdAt, updatedAt } from 'drizzle/schemaHelpers';
-import { OrganizationTable } from 'schema/organization';
-import { UserTable } from 'schema/user';
+import { OrganizationTable } from './organization';
+import { UserTable } from './user';
+
 
 export const OrganizationUserSettingsTable = pgTable(
     'organization_user_settings',
@@ -19,3 +20,5 @@ export const OrganizationUserSettingsTable = pgTable(
     },
     table => [primaryKey({ columns: [table.userId, table.organizationId] })]
 );
+
+

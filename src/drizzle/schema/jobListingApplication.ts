@@ -1,7 +1,7 @@
 import { integer, pgEnum, pgTable, primaryKey, text, uuid, varchar } from 'drizzle-orm/pg-core';
-import { JobListingTable } from 'schema/jobListing';
-import { UserTable } from 'schema/user';
 import { createdAt, updatedAt } from 'drizzle/schemaHelpers';
+import { JobListingTable } from './jobListing';
+import { UserTable } from './user';
 
 export const applicationStages = [
     'denied',

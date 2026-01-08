@@ -8,8 +8,8 @@ import {
     timestamp,
     varchar,
 } from 'drizzle-orm/pg-core';
-import { OrganizationTable } from 'schema/organization';
 import { createdAt, id, updatedAt } from 'drizzle/schemaHelpers';
+import { OrganizationTable } from './organization';
 
 export const wageIntervals = ['hourly', 'yearly'] as const;
 export type WageInterval = (typeof wageIntervals)[number];
@@ -58,3 +58,4 @@ export const JobListingTable = pgTable(
     },
     table => [index().on(table.stateAbbreviation)]
 );
+

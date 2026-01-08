@@ -1,5 +1,6 @@
 import { pgTable, varchar } from 'drizzle-orm/pg-core';
-import { createdAt, updatedAt} from 'drizzle/schemaHelpers'
+import { createdAt, updatedAt } from 'drizzle/schemaHelpers';
+
 
 export const UserTable = pgTable('users', {
     id: varchar().primaryKey(),
@@ -7,5 +8,5 @@ export const UserTable = pgTable('users', {
     imageUrl: varchar().notNull(),
     email: varchar().notNull().unique(),
     createdAt,
-    updatedAt
-})
+    updatedAt,
+});

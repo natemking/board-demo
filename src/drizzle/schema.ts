@@ -5,3 +5,4 @@ export * from './schema/organizationUserSettings'
 export * from './schema/user'
 export * from './schema/userNotificationSettings'
 export * from './schema/userResume'
+export * from './schema/relations';

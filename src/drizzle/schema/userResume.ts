@@ -1,6 +1,7 @@
 import { pgTable, varchar } from 'drizzle-orm/pg-core';
 import { createdAt, updatedAt } from 'drizzle/schemaHelpers';
-import { UserTable } from 'schema/user';
+import { UserTable } from './user';
+
 
 export const UserResumeTable = pgTable('user-resume-table', {
     userId: varchar()
@@ -10,5 +11,5 @@ export const UserResumeTable = pgTable('user-resume-table', {
     resumeFileKey: varchar().notNull(),
     aiSummary: varchar(),
     createdAt,
-    updatedAt
+    updatedAt,
 });
