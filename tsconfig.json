@@ -23,7 +23,9 @@
       "lib/*": ["src/lib/*"],
       "env/*": ["src/lib/env/*"],
       "drizzle/*": ["src/drizzle/*"],
-      "schema/*": ["src/drizzle/schema/*"]
+      "schema/*": ["src/drizzle/schema/*"],
+      "components/*": ["src/ui/components"],
+      "shadcn/*": ["src/ui/components/shadcn/*"] 
     }
   },
   "include": [
