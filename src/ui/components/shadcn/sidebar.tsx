@@ -244,8 +244,9 @@ function Sidebar({
 }
 
 function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
-    const { toggleSidebar, open } = useSidebar();
-
+    const { toggleSidebar, open, openMobile } = useSidebar();
+    const isMobile = useIsMobile();
+    
     return (
         <Button
             data-sidebar='trigger'
@@ -259,7 +260,11 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
             }}
             {...props}
         >
-            {open ? <SidebarCloseIcon /> : <SidebarOpenIcon />}
+            {(!isMobile && open) || (isMobile && openMobile) ? (
+                <SidebarCloseIcon />
+            ) : (
+                <SidebarOpenIcon />
+            )}
             <span className='sr-only'>Toggle Sidebar</span>
         </Button>
     );
@@ -585,7 +590,7 @@ function SidebarMenuSkeleton({
     // const width = React.useMemo(() => {
     //     return `${Math.floor(Math.random() * 40) + 50}%`;
     // }, []);
-    const [width] = React.useState(() => `${Math.floor(Math.random() * 40) + 50}%`)
+    const [width] = React.useState(() => `${Math.floor(Math.random() * 40) + 50}%`);
 
     return (
         <div
@@ -594,10 +599,12 @@ function SidebarMenuSkeleton({
             className={cn('flex h-8 items-center gap-2 rounded-md px-2', className)}
             {...props}
         >
-            {showIcon ? <Skeleton
+            {showIcon ? (
+                <Skeleton
                     className='size-4 rounded-md'
                     data-sidebar='menu-skeleton-icon'
-                /> : null}
+                />
+            ) : null}
             <Skeleton
                 className='h-4 max-w-(--skeleton-width) flex-1'
                 data-sidebar='menu-skeleton-text'
