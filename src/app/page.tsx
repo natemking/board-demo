@@ -47,9 +47,7 @@ export default function HomePage(): React.JSX.Element {
                     <SidebarFooter>
                         <SidebarMenu>
                             <SidebarMenuItem>
-                                <SidebarMenuButton>
-                                    <SidebarUserButton />
-                                </SidebarMenuButton>
+                                <SidebarUserButton />
                             </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarFooter>

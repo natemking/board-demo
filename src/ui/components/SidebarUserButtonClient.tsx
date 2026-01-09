@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { SignOutButton } from '@clerk/nextjs';
+import { useClerk } from '@clerk/nextjs';
 import { ChevronsUpDown, LogOutIcon, SettingsIcon, UserIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from 'components/shadcn/avatar';
 import {
@@ -14,8 +14,8 @@ import {
 } from 'components/shadcn/dropdown-menu';
 import { SidebarMenuButton } from 'shadcn/sidebar';
 import { useIsMobile } from 'lib/hooks/useMobile';
+import { SignOutButton } from 'services/clerk/components/AuthBtns';
 import type { SidebarUserButtonClientProps } from 'types';
-
 
 function UserInfo({
     user: { email, imageUrl, name },
@@ -47,18 +47,20 @@ function UserInfo({
 
 export function SidebarUserButtonClient({ user }: SidebarUserButtonClientProps): React.JSX.Element {
     const isMobile = useIsMobile();
+    const { openUserProfile } = useClerk();
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
-                    className='data-state-open:bg-sidebar-accent data-state-open:text-sidebar-accent-foreground'
+                    className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
                     size='lg'
                 >
                     <UserInfo user={user} />
                     <ChevronsUpDown className='ml-auto group-data-[state=collapsed]:hidden' />
                 </SidebarMenuButton>
             </DropdownMenuTrigger>
+
             <DropdownMenuContent
                 align='end'
                 className='max-w-80 min-w-64'
@@ -71,12 +73,16 @@ export function SidebarUserButtonClient({ user }: SidebarUserButtonClientProps):
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={() => openUserProfile()}>
+                <DropdownMenuItem
+                    onClick={() => {
+                        openUserProfile();
+                    }}
+                >
                     <UserIcon className='mr-1' /> Profile
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                     <Link href='/user-settings/notifications'>
-                        <SettingsIcon className='mr-1'/> Settings
+                        <SettingsIcon className='mr-1' /> Settings
                     </Link>
                 </DropdownMenuItem>
 
