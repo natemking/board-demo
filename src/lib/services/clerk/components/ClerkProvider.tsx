@@ -4,9 +4,9 @@ import { Suspense } from 'react';
 import { ClerkProvider as OriginalClerkProvider } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
 import { useIsDarkMode } from 'lib/hooks/useIsDarkMode';
-import type { CompositionalComponent } from 'types';
+import type { ClerkProviderProps } from 'types';
 
-export function ClerkProvider({ children }: CompositionalComponent): React.JSX.Element {
+export function ClerkProvider({ children }: ClerkProviderProps): React.JSX.Element {
     const isDarkMode = useIsDarkMode();
 
     return (

@@ -1,8 +1,11 @@
+import Link from 'next/link';
+import { LogInIcon } from 'lucide-react';
 import { AppSidebarClient } from 'components/AppSidebarClient';
 import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
+    SidebarGroup,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
@@ -10,11 +13,13 @@ import {
     SidebarProvider,
     SidebarTrigger,
 } from 'shadcn/sidebar';
+import { SignedOut } from 'services/clerk/components/SignInStatus';
+
 
 export default function HomePage(): React.JSX.Element {
     return (
         <SidebarProvider className='overflow-y-hidden'>
-           <AppSidebarClient>
+            <AppSidebarClient>
                 <Sidebar
                     className='overflow-hidden'
                     collapsible='icon'
@@ -23,19 +28,34 @@ export default function HomePage(): React.JSX.Element {
                         <SidebarTrigger />
                         <span className='text-xl text-nowrap'>NMK Jobs</span>
                     </SidebarHeader>
-                    <SidebarContent>{ }</SidebarContent>
+                    <SidebarContent>
+                        <SidebarGroup>
+                            <SidebarMenu>
+                                
+                                    <SignedOut>
+                                        <SidebarMenuItem>
+                                            <SidebarMenuButton asChild>
+                                                <Link href='/sign-in'>
+                                                    <LogInIcon />
+                                                    <span>Log In</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    </SignedOut>
+                            
+                            </SidebarMenu>
+                        </SidebarGroup>
+                    </SidebarContent>
                     <SidebarFooter>
                         <SidebarMenu>
                             <SidebarMenuItem>
-                                <SidebarMenuButton>
-                                    Click
-                                </SidebarMenuButton>
+                                <SidebarMenuButton>Click</SidebarMenuButton>
                             </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarFooter>
                 </Sidebar>
                 <main className='flex-1'>Lorem ipsum</main>
-           </AppSidebarClient>
+            </AppSidebarClient>
         </SidebarProvider>
     );
 }

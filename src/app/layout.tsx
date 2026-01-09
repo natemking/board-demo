@@ -24,10 +24,14 @@ export default function RootLayout({
     children: React.ReactNode;
 }>): React.JSX.Element {
     return (
-        <html lang='en'>
-            <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
-                <ClerkProvider>{children}</ClerkProvider>
-            </body>
-        </html>
+        <ClerkProvider>
+            <html lang='en'>
+                <body
+                    className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
+                >
+                    {children}
+                </body>
+            </html>
+        </ClerkProvider>
     );
 }

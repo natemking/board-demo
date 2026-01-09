@@ -1,3 +1,9 @@
 import type { CompositionalComponent } from './index';
 
-export type AppSidebarClientProps = CompositionalComponent
+// clerk components
+export type ClerkProviderProps = CompositionalComponent;
+export type SignedOutStatusProps = CompositionalComponent;
+export type SignedInStatusProps = CompositionalComponent;
+
+// components
+export type AppSidebarClientProps = CompositionalComponent;
