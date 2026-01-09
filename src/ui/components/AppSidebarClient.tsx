@@ -2,7 +2,7 @@
 
 import type { AppSidebarClientProps } from 'types';
 import { SidebarTrigger } from 'shadcn/sidebar';
-import { useIsMobile } from 'lib/hooks/use-mobile';
+import { useIsMobile } from 'lib/hooks/useMobile';
 
 export function AppSidebarClient({ children }: AppSidebarClientProps): React.JSX.Element | null {
     const isMobile = useIsMobile();

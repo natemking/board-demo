@@ -8,6 +8,7 @@ export const env = createEnv({
         DB_HOST: z.string().min(1),
         DB_PORT: z.string().min(1),
         DB_NAME: z.string().min(1),
+        CLERK_SECRET_KEY: z.string().min(1),
     },
     createFinalSchema: envVars => {
         return z.object(envVars).transform(val => {

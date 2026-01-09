@@ -484,6 +484,8 @@ const eslintConfig = defineConfig([
             '**/loading.{jsx,tsx}',
             '**/not-found.{jsx,tsx}',
             '**/page.{jsx,tsx}',
+            '**/middleware.{js,ts}',
+            '**/proxy.{js,ts}',
             '**/*.config.{js,ts,cjs,cts,mjs,mts}',
         ],
         rules: {
