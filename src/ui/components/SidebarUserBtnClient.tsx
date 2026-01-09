@@ -1,16 +1,21 @@
 'use client';
 
-import { ChevronsUpDown } from 'lucide-react';
+import Link from 'next/link';
+import { SignOutButton } from '@clerk/nextjs';
+import { ChevronsUpDown, LogOutIcon, SettingsIcon, UserIcon } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from 'components/shadcn/avatar';
 import {
     DropdownMenu,
     DropdownMenuContent,
+    DropdownMenuItem,
     DropdownMenuLabel,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from 'components/shadcn/dropdown-menu';
 import { SidebarMenuButton } from 'shadcn/sidebar';
 import { useIsMobile } from 'lib/hooks/useMobile';
 import type { SidebarUserBtnClientProps } from 'types';
-import { Avatar, AvatarFallback, AvatarImage } from 'components/shadcn/avatar';
+
 
 function UserInfo({
     user: { email, imageUrl, name },
@@ -63,6 +68,25 @@ export function SidebarUserBtnClient({ user }: SidebarUserBtnClientProps): React
                 <DropdownMenuLabel className='p-1 font-normal'>
                     <UserInfo user={user} />
                 </DropdownMenuLabel>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem onClick={() => openUserProfile()}>
+                    <UserIcon className='mr-1' /> Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <Link href='/user-settings/notifications'>
+                        <SettingsIcon className='mr-1'/> Settings
+                    </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <SignOutButton>
+                    <DropdownMenuItem>
+                        <LogOutIcon className='mr-1' /> Logout
+                    </DropdownMenuItem>
+                </SignOutButton>
             </DropdownMenuContent>
         </DropdownMenu>
     );
