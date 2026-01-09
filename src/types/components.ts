@@ -12,7 +12,7 @@ export type SignOutButtonProps = CompositionalComponent & ComponentProps<typeof 
 
 // components
 export type AppSidebarClientProps = CompositionalComponent;
-export type SidebarUserBtnClientProps = {
+export type SidebarUserButtonClientProps = {
     user: {
         email: string;
         imageUrl: string;

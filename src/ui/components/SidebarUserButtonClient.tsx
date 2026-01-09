@@ -14,12 +14,12 @@ import {
 } from 'components/shadcn/dropdown-menu';
 import { SidebarMenuButton } from 'shadcn/sidebar';
 import { useIsMobile } from 'lib/hooks/useMobile';
-import type { SidebarUserBtnClientProps } from 'types';
+import type { SidebarUserButtonClientProps } from 'types';
 
 
 function UserInfo({
     user: { email, imageUrl, name },
-}: SidebarUserBtnClientProps): React.JSX.Element {
+}: SidebarUserButtonClientProps): React.JSX.Element {
     const nameInitials = name
         .split(' ')
         .slice(0, 2)
@@ -45,7 +45,7 @@ function UserInfo({
     );
 }
 
-export function SidebarUserBtnClient({ user }: SidebarUserBtnClientProps): React.JSX.Element {
+export function SidebarUserButtonClient({ user }: SidebarUserButtonClientProps): React.JSX.Element {
     const isMobile = useIsMobile();
 
     return (

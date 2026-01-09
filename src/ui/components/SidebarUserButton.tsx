@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 import { auth } from '@clerk/nextjs/server';
-import { SidebarUserBtnClient } from 'components/SidebarUserBtnClient';
+import { SidebarUserButtonClient } from 'components/SidebarUserButtonClient';
 
-export function SidebarUserBtn(): React.JSX.Element {
+export function SidebarUserButton(): React.JSX.Element {
     return (
         <Suspense>
             <SidebarUserSuspense />
@@ -13,6 +13,6 @@ export function SidebarUserBtn(): React.JSX.Element {
 export async function SidebarUserSuspense(): Promise<React.JSX.Element> {
     const { userId } = await auth()
     return (
-       <SidebarUserBtnClient user={{email: 'test@test.com', name: 'test test', imgUrl: ''}}/>
+       <SidebarUserButtonClient user={{email: 'test@test.com', name: 'test test', imgUrl: ''}}/>
     );
 }

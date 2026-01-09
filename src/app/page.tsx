@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { LogInIcon } from 'lucide-react';
 import { AppSidebarClient } from 'components/AppSidebarClient';
-import { SidebarUserBtn } from 'components/SidebarUserBtn';
+import { SidebarUserButton } from 'components/SidebarUserButton';
 import {
     Sidebar,
     SidebarContent,
@@ -48,7 +48,7 @@ export default function HomePage(): React.JSX.Element {
                         <SidebarMenu>
                             <SidebarMenuItem>
                                 <SidebarMenuButton>
-                                    <SidebarUserBtn />
+                                    <SidebarUserButton />
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                         </SidebarMenu>
