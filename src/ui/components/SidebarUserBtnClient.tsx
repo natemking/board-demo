@@ -4,6 +4,7 @@ import { ChevronsUpDown } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
+    DropdownMenuLabel,
     DropdownMenuTrigger,
 } from 'components/shadcn/dropdown-menu';
 import { SidebarMenuButton } from 'shadcn/sidebar';
@@ -53,7 +54,16 @@ export function SidebarUserBtnClient({ user }: SidebarUserBtnClientProps): React
                     <ChevronsUpDown className='ml-auto group-data-[state=collapsed]:hidden' />
                 </SidebarMenuButton>
             </DropdownMenuTrigger>
-            <DropdownMenuContent></DropdownMenuContent>
+            <DropdownMenuContent
+                align='end'
+                className='max-w-80 min-w-64'
+                side={isMobile ? 'bottom' : 'right'}
+                sideOffset={4}
+            >
+                <DropdownMenuLabel className='p-1 font-normal'>
+                    <UserInfo user={user} />
+                </DropdownMenuLabel>
+            </DropdownMenuContent>
         </DropdownMenu>
     );
 }
