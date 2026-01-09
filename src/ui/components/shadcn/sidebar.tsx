@@ -5,7 +5,7 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { SidebarCloseIcon, SidebarOpenIcon } from 'lucide-react';
 
-import { useIsMobile } from 'lib/hooks/use-mobile';
+import { useIsMobile } from 'lib/hooks/useMobile';
 import { cn } from 'lib/utils';
 import { Button } from 'shadcn/button';
 import { Input } from 'shadcn/input';
@@ -246,7 +246,7 @@ function Sidebar({
 function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
     const { toggleSidebar, open, openMobile } = useSidebar();
     const isMobile = useIsMobile();
-    
+
     return (
         <Button
             data-sidebar='trigger'
