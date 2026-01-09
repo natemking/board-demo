@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { LogInIcon } from 'lucide-react';
 import { AppSidebarClient } from 'components/AppSidebarClient';
+import { SidebarUserBtn } from 'components/SidebarUserBtn';
 import {
     Sidebar,
     SidebarContent,
@@ -14,7 +15,6 @@ import {
     SidebarTrigger,
 } from 'shadcn/sidebar';
 import { SignedOut } from 'services/clerk/components/SignInStatus';
-
 
 export default function HomePage(): React.JSX.Element {
     return (
@@ -31,25 +31,25 @@ export default function HomePage(): React.JSX.Element {
                     <SidebarContent>
                         <SidebarGroup>
                             <SidebarMenu>
-                                
-                                    <SignedOut>
-                                        <SidebarMenuItem>
-                                            <SidebarMenuButton asChild>
-                                                <Link href='/sign-in'>
-                                                    <LogInIcon />
-                                                    <span>Log In</span>
-                                                </Link>
-                                            </SidebarMenuButton>
-                                        </SidebarMenuItem>
-                                    </SignedOut>
-                            
+                                <SignedOut>
+                                    <SidebarMenuItem>
+                                        <SidebarMenuButton asChild>
+                                            <Link href='/sign-in'>
+                                                <LogInIcon />
+                                                <span>Log In</span>
+                                            </Link>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                </SignedOut>
                             </SidebarMenu>
                         </SidebarGroup>
                     </SidebarContent>
                     <SidebarFooter>
                         <SidebarMenu>
                             <SidebarMenuItem>
-                                <SidebarMenuButton>Click</SidebarMenuButton>
+                                <SidebarMenuButton>
+                                    <SidebarUserBtn />
+                                </SidebarMenuButton>
                             </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarFooter>

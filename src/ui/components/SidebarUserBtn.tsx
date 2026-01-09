@@ -1,5 +1,6 @@
-import { auth } from '@clerk/nextjs/server';
 import { Suspense } from 'react';
+import { auth } from '@clerk/nextjs/server';
+import { SidebarUserBtnClient } from 'components/SidebarUserBtnClient';
 
 export function SidebarUserBtn(): React.JSX.Element {
     return (
@@ -12,6 +13,6 @@ export function SidebarUserBtn(): React.JSX.Element {
 export async function SidebarUserSuspense(): Promise<React.JSX.Element> {
     const { userId } = await auth()
     return (
-       <SidebarUserClient user={{email: 'test@test.com', name: 'test test', imgUrl: ''}}/>
+       <SidebarUserBtnClient user={{email: 'test@test.com', name: 'test test', imgUrl: ''}}/>
     );
 }

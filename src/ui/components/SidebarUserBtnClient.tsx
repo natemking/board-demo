@@ -6,7 +6,7 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from 'components/shadcn/dropdown-menu';
-import { SidebarMenu, SidebarMenuButton } from 'shadcn/sidebar';
+import { SidebarMenuButton } from 'shadcn/sidebar';
 import { useIsMobile } from 'lib/hooks/useMobile';
 import type { SidebarUserBtnClientProps } from 'types';
 import { Avatar, AvatarFallback, AvatarImage } from 'components/shadcn/avatar';
@@ -31,7 +31,7 @@ function UserInfo({
                     {nameInitials}
                 </AvatarFallback>
             </Avatar>
-            <div className='flex min-w-0 flex-1 flex-col leading-tight group-data-state-collapsed:hidden'>
+            <div className='flex min-w-0 flex-1 flex-col leading-tight group-data-[state=collapsed]:hidden'>
                 <span className='truncate text-sm font-semibold'>{name}</span>
                 <span className='truncate text-xs'>{email}</span>
             </div>
@@ -43,19 +43,17 @@ export function SidebarUserBtnClient({ user }: SidebarUserBtnClientProps): React
     const isMobile = useIsMobile();
 
     return (
-        <SidebarMenu>
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <SidebarMenuButton
-                        className='data-state-open:bg-sidebar-accent data-state-open:text-sidebar-accent-foreground'
-                        size='lg'
-                    >
-                        <UserInfo user={user} />
-                        <ChevronsUpDown className='ml-auto group-data-state-collapsed:hidden' />
-                    </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent></DropdownMenuContent>
-            </DropdownMenu>
-        </SidebarMenu>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
+                    className='data-state-open:bg-sidebar-accent data-state-open:text-sidebar-accent-foreground'
+                    size='lg'
+                >
+                    <UserInfo user={user} />
+                    <ChevronsUpDown className='ml-auto group-data-[state=collapsed]:hidden' />
+                </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent></DropdownMenuContent>
+        </DropdownMenu>
     );
 }
