@@ -12,8 +12,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from 'components/shadcn/dropdown-menu';
-import { SidebarMenuButton } from 'shadcn/sidebar';
-import { useIsMobile } from 'lib/hooks/useMobile';
+import { SidebarMenuButton, useSidebar } from 'shadcn/sidebar';
 import { SignOutButton } from 'services/clerk/components/AuthBtns';
 import type { SidebarUserButtonClientProps } from 'types';
 
@@ -46,7 +45,7 @@ function UserInfo({
 }
 
 export function SidebarUserButtonClient({ user }: SidebarUserButtonClientProps): React.JSX.Element {
-    const isMobile = useIsMobile();
+    const {isMobile, setOpenMobile } = useSidebar();
     const { openUserProfile } = useClerk();
 
     return (
@@ -76,6 +75,7 @@ export function SidebarUserButtonClient({ user }: SidebarUserButtonClientProps):
                 <DropdownMenuItem
                     onClick={() => {
                         openUserProfile();
+                        setOpenMobile(false)
                     }}
                 >
                     <UserIcon className='mr-1' /> Profile
