@@ -7,3 +7,10 @@ export type SignedInStatusProps = CompositionalComponent;
 
 // components
 export type AppSidebarClientProps = CompositionalComponent;
+export type SidebarUserBtnClientProps = {
+    user: {
+        email: string;
+        imageUrl: string;
+        name: string;
+    };
+};
