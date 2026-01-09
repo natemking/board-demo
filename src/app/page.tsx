@@ -14,7 +14,7 @@ import {
     SidebarProvider,
     SidebarTrigger,
 } from 'shadcn/sidebar';
-import { SignedOut } from 'services/clerk/components/SignInStatus';
+import { SignedIn, SignedOut } from 'services/clerk/components/SignInStatus';
 
 export default function HomePage(): React.JSX.Element {
     return (
@@ -44,13 +44,15 @@ export default function HomePage(): React.JSX.Element {
                             </SidebarMenu>
                         </SidebarGroup>
                     </SidebarContent>
-                    <SidebarFooter>
-                        <SidebarMenu>
-                            <SidebarMenuItem>
-                                <SidebarUserButton />
-                            </SidebarMenuItem>
-                        </SidebarMenu>
-                    </SidebarFooter>
+                    <SignedIn>
+                        <SidebarFooter>
+                            <SidebarMenu>
+                                <SidebarMenuItem>
+                                    <SidebarUserButton />
+                                </SidebarMenuItem>
+                            </SidebarMenu>
+                        </SidebarFooter>
+                    </SignedIn>
                 </Sidebar>
                 <main className='flex-1'>Lorem ipsum</main>
             </AppSidebarClient>
