@@ -23,6 +23,7 @@
       "lib/*": ["src/lib/*"],
       "env/*": ["src/lib/env/*"],
       "services/*": ["src/lib/services/*"],
+      "db/*": ["src/lib/db/*"],
       "drizzle/*": ["src/drizzle/*"],
       "schema/*": ["src/drizzle/schema/*"],
       "components/*": ["src/ui/components/*"],
