@@ -1,6 +1,7 @@
 import { Webhook } from 'svix';
 import { NonRetriableError } from 'inngest';
 import { insertUser } from 'db/user';
+import { insertUserNotificationsSettings } from 'db/userNotificationSettings';
 import { inngest } from 'services/inngest/client';
 import { env } from 'env/server';
 import type { ClerkWebhookData } from 'types';
@@ -36,7 +37,7 @@ export const clerkCreateUser = inngest.createFunction(
             );
 
             if (!email) {
-                throw new NonRetriableError('No primary email address found')
+                throw new NonRetriableError('No primary email address found');
             }
 
             await insertUser({
@@ -45,12 +46,14 @@ export const clerkCreateUser = inngest.createFunction(
                 imageUrl: userData.image_url,
                 email: email.email_address,
                 createdAt: new Date(userData.created_at),
-                updatedAt: new Date(userData.updated_at)
-            })
-            
-            return userData.id
+                updatedAt: new Date(userData.updated_at),
+            });
+
+            return userData.id;
         });
 
-        
+        await step.run('create-user-notification-settings', async () => {
+            await insertUserNotificationsSettings({ userId });
+        });
     }
 );
