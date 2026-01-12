@@ -1,6 +1,9 @@
 import { Suspense } from 'react';
-import { auth } from '@clerk/nextjs/server';
+import { LogOutIcon } from 'lucide-react';
 import { SidebarUserButtonClient } from 'components/SidebarUserButtonClient';
+import { getCurrentUser } from 'services/clerk/getCurrentAuth';
+import { SignOutButton } from 'lib/services/clerk/components/AuthBtns';
+import { SidebarMenuButton } from 'components/shadcn/sidebar';
 
 export function SidebarUserButton(): React.JSX.Element {
     return (
@@ -11,8 +14,20 @@ export function SidebarUserButton(): React.JSX.Element {
 }
 
 export async function SidebarUserSuspense(): Promise<React.JSX.Element> {
-    const { userId } = await auth()
+    const { user } = await getCurrentUser({allData: true})
+    
+    if (!user) {
+        return(
+            <SignOutButton>
+                <SidebarMenuButton>
+                    <LogOutIcon />
+                    <span>Log Out</span>
+                </SidebarMenuButton>
+            </SignOutButton>
+        )
+    }
+
     return (
-       <SidebarUserButtonClient user={{email: 'test@test.com', name: 'test test', imgUrl: ''}}/>
+       <SidebarUserButtonClient user={user}/>
     );
 }

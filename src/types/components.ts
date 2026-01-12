@@ -1,5 +1,6 @@
 import type { ComponentProps } from 'react';
 import type { SignInButton, SignOutButton, SignUpButton } from '@clerk/nextjs';
+import type { UserTable } from 'drizzle/schema';
 import type { CompositionalComponent } from './index';
 
 // clerk components
@@ -13,9 +14,5 @@ export type SignOutButtonProps = CompositionalComponent & ComponentProps<typeof 
 // components
 export type AppSidebarClientProps = CompositionalComponent;
 export type SidebarUserButtonClientProps = {
-    user: {
-        email: string;
-        imageUrl: string;
-        name: string;
-    };
+    user: typeof UserTable.$inferSelect;
 };
