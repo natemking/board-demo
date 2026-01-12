@@ -1,4 +1,8 @@
+
 import { inngest } from 'services/inngest/client';
+
+
+
 
 export const clerkCreateUser = inngest.createFunction(
     {
@@ -6,9 +10,9 @@ export const clerkCreateUser = inngest.createFunction(
         name: 'Clerk - Create DB User',
     },
     {
-        event: 'clerk/user.created'
+        event: 'clerk/user.created',
     },
-    async({event, step}) => {
-        
+    async ({ event, step }) => {
+
     }
 );
