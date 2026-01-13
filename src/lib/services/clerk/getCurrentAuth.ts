@@ -15,7 +15,9 @@ export async function getCurrentUser({ allData = false } = {}): Promise<{
     };
 }
 
-function getUser(id: string): Promise<typeof UserTable.$inferSelect | undefined> {
+async function getUser(id: string): Promise<typeof UserTable.$inferSelect | undefined> {
+    'use cache';
+    
     return db.query.UserTable.findFirst({
         where: eq(UserTable.id, id),
     });
