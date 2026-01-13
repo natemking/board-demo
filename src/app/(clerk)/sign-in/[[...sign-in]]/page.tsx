@@ -1,5 +1,8 @@
 import { SignIn } from '@clerk/nextjs';
+import { connection } from 'next/server'
 
-export default function SignInPage(): React.JSX.Element {
+
+export default async function SignInPage(): Promise<React.JSX.Element> {
+    await connection();
     return <SignIn />;
 }
