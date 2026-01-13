@@ -1,7 +1,9 @@
+import { cacheTag } from 'next/cache';
 import { auth } from '@clerk/nextjs/server';
 import { eq } from 'drizzle-orm';
 import { db } from 'drizzle/db';
 import { UserTable } from 'drizzle/schema';
+import { getUserIdTag } from 'db/cache/user';
 
 export async function getCurrentUser({ allData = false } = {}): Promise<{
     userId: string | null;
@@ -18,6 +20,8 @@ export async function getCurrentUser({ allData = false } = {}): Promise<{
 async function getUser(id: string): Promise<typeof UserTable.$inferSelect | undefined> {
     'use cache';
     
+    cacheTag(getUserIdTag(id));
+
     return db.query.UserTable.findFirst({
         where: eq(UserTable.id, id),
     });
