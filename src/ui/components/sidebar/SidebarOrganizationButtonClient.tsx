@@ -2,7 +2,14 @@
 
 import Link from 'next/link';
 import { useClerk } from '@clerk/nextjs';
-import { ChevronsUpDown, LogOutIcon, SettingsIcon, UserIcon } from 'lucide-react';
+import {
+    ArrowLeftRightIcon,
+    Building2Icon,
+    ChevronsUpDown,
+    CreditCardIcon,
+    LogOutIcon,
+    UserRoundCogIcon,
+} from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from 'components/shadcn/avatar';
 import {
     DropdownMenu,
@@ -21,7 +28,7 @@ function OrganizationInfo({
     organization: { imageUrl, name },
 }: SidebarOrganizationButtonClientProps): React.JSX.Element {
     const nameInitials = name
-        .split(' ')  
+        .split(' ')
         .slice(0, 2)
         .map(n => n[0])
         .join('');
@@ -50,7 +57,7 @@ export function SidebarOrganizationButtonClient({
     organization,
 }: SidebarOrganizationButtonClientProps): React.JSX.Element {
     const { isMobile, setOpenMobile } = useSidebar();
-    const { openUserProfile } = useClerk();
+    const { openOrganizationProfile } = useClerk();
 
     return (
         <DropdownMenu>
@@ -84,15 +91,28 @@ export function SidebarOrganizationButtonClient({
 
                 <DropdownMenuItem
                     onClick={() => {
-                        openUserProfile();
+                        openOrganizationProfile();
                         setOpenMobile(false);
                     }}
                 >
-                    <UserIcon className='mr-1' /> Profile
+                    <Building2Icon className='mr-1' /> Manage Organization
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <Link href='/user-settings/notifications'>
-                        <SettingsIcon className='mr-1' /> Settings
+                    <Link href='/employer/user-settings/notifications'>
+                        <UserRoundCogIcon className='mr-1' /> User Settings
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <Link href='/employer/pricing'>
+                        <CreditCardIcon className='mr-1' /> Change Plan
+                    </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem asChild>
+                    <Link href='/organizations/select'>
+                        <ArrowLeftRightIcon className='mr-1' /> Switch Organizations
                     </Link>
                 </DropdownMenuItem>
 
