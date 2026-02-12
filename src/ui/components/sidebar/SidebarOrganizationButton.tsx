@@ -1,9 +1,7 @@
 import { Suspense } from 'react';
-import { LogOutIcon } from 'lucide-react';
-import { SidebarMenuButton } from 'components/shadcn/sidebar';
 import { SidebarOrganizationButtonClient } from 'components/sidebar/SidebarOrganizationButtonClient';
+import { SidebarSignOutButton } from 'components/sidebar/SidebarSignOutButton';
 import { getCurrentOrganization, getCurrentUser } from 'services/clerk/getCurrentAuth';
-import { SignOutButton } from 'lib/services/clerk/components/AuthBtns';
  
 export function SidebarOrganizationButton(): React.JSX.Element {
     return (
@@ -22,12 +20,7 @@ export async function SidebarOrganizationSuspense(): Promise<React.JSX.Element> 
 
     if (!user || !organization) {
         return (
-            <SignOutButton>
-                <SidebarMenuButton>
-                    <LogOutIcon />
-                    <span>Log Out</span>
-                </SidebarMenuButton>
-            </SignOutButton>
+            <SidebarSignOutButton />
         );
     }
 
