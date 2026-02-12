@@ -1,4 +1,4 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 import type { SignInButton, SignOutButton, SignUpButton } from '@clerk/nextjs';
 import type { UserTable } from 'drizzle/schema';
 import type { CompositionalComponent } from './index';
@@ -13,6 +13,10 @@ export type SignOutButtonProps = CompositionalComponent & ComponentProps<typeof 
 
 // components
 export type AppSidebarClientProps = CompositionalComponent;
+export type AppSidebarProps = CompositionalComponent & {
+    content: ReactNode;
+    footerButton: ReactNode;
+}
 export type SidebarUserButtonClientProps = {
     user: typeof UserTable.$inferSelect;
 };
