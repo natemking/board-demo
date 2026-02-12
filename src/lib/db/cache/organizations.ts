@@ -9,7 +9,7 @@ export function getOrganizationIdTag(id: string): string {
     return getIdTag('organizations', id);
 }
 
-export function revalidateUserCache(id: string): void {
+export function revalidateOrganizationsCache(id: string): void {
     revalidateTag(getOrganizationsGlobalTag(), { expire: 0 })
     revalidateTag(getOrganizationIdTag(id), { expire: 0 })
 }

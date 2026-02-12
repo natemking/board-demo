@@ -4,6 +4,7 @@ import { deleteUser, insertUser, updateUser } from 'db/user';
 import { insertUserNotificationsSettings } from 'db/userNotificationSettings';
 import { inngest } from 'services/inngest/client';
 import { env } from 'env/server';
+import { insertOrganization } from 'lib/db/organizations';
 import type { ClerkWebhookData } from 'types';
 
 async function verifyWebhook<T>({
@@ -12,7 +13,7 @@ async function verifyWebhook<T>({
 }: Pick<ClerkWebhookData<T>['data'], 'raw' | 'headers'>): Promise<void> {
     try {
         await new Webhook(env.CLERK_WEBHOOK_SECRET).verify(raw, headers);
-    } catch (err) {
+    } catch (err) { 
         throw new NonRetriableError('Invalid webhook');
     }
 }
@@ -111,6 +112,35 @@ export const clerkDeleteUser = inngest.createFunction(
             }
 
             await deleteUser(id) 
+        });
+    }
+);
+
+export const clerkCreateOrganization = inngest.createFunction(
+    {
+        id: 'clerk/create-db-organization',
+        name: 'Clerk - Create DB Organization',
+    },
+    {
+        event: 'clerk/organization.created',
+    },
+    async ({ event, step }) => {
+        await step.run('verify-webhook', async (): Promise<void> => {
+            await verifyWebhook(event.data);
+        });
+
+        await step.run('create-organization', async (): Promise<string> => {
+            const orgData = event.data.data;
+
+            await insertOrganization({
+                id: orgData.id,
+                name: orgData.name,
+                imageUrl: orgData.image_url,
+                createdAt: new Date(orgData.created_at),
+                updatedAt: new Date(orgData.updated_at),
+            });
+
+            return orgData.id;
         });
     }
 );
