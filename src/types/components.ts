@@ -17,6 +17,15 @@ export type AppSidebarProps = CompositionalComponent & {
     content: ReactNode;
     footerButton: ReactNode;
 }
+export type SidebarNavGroupProps = {
+    className?: string;
+    items: {
+        href: string;
+        icon: ReactNode;
+        label: string;
+        authStatus?: 'signedOut' | 'signedIn';
+    }[]
+}
 export type SidebarUserButtonClientProps = {
     user: typeof UserTable.$inferSelect;
 };
