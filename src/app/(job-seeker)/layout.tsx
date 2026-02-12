@@ -4,6 +4,7 @@ import { BrainCircuitIcon, ClipboardList, LayoutDashboard, LogInIcon } from 'luc
 import { AppSidebar } from 'components/sidebar/AppSidebar';
 import { SidebarUserButton } from 'components/sidebar/SidebarUserButton';
 import { SidebarNavMenuGroup } from 'components/sidebar/SidebarNavMenuGroup';
+import { aiSearchUrl, employerUrl, signInUrl } from 'lib/constants';
 
 export default function JobSeekerLayout({ children }: { children: ReactNode }): React.JSX.Element {
     return (
@@ -17,19 +18,19 @@ export default function JobSeekerLayout({ children }: { children: ReactNode }): 
 
                     },
                     {
-                        href: '/ai-search',
+                        href: aiSearchUrl,
                         icon: <BrainCircuitIcon />,
                         label: 'AI Search'
 
                     },
                     {
-                        href: '/employer',
+                        href: employerUrl,
                         icon: <LayoutDashboard />,
                         label: 'Employer Dashboard',
                         authStatus: 'signedIn'
                     },
                     {
-                        href: '/sign-in',
+                        href: signInUrl,
                         icon: <LogInIcon />,
                         label: 'Sign In',
                         authStatus: 'signedOut'

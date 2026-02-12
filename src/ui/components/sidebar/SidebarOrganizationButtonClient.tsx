@@ -22,6 +22,7 @@ import {
 import { SidebarMenuButton, useSidebar } from 'shadcn/sidebar';
 import { SignOutButton } from 'services/clerk/components/AuthBtns';
 import type { SidebarOrganizationButtonClientProps } from 'types';
+import { employerPricingUrl, employerUserSettingsNotificationsUrl, organizationsSelectUrl } from 'lib/constants';
 
 function OrganizationInfo({
     user: { email },
@@ -98,12 +99,12 @@ export function SidebarOrganizationButtonClient({
                     <Building2Icon className='mr-1' /> Manage Organization
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <Link href='/employer/user-settings/notifications'>
+                    <Link href={employerUserSettingsNotificationsUrl}>
                         <UserRoundCogIcon className='mr-1' /> User Settings
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <Link href='/employer/pricing'>
+                    <Link href={employerPricingUrl}>
                         <CreditCardIcon className='mr-1' /> Change Plan
                     </Link>
                 </DropdownMenuItem>
@@ -111,7 +112,7 @@ export function SidebarOrganizationButtonClient({
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem asChild>
-                    <Link href='/organizations/select'>
+                    <Link href={organizationsSelectUrl}>
                         <ArrowLeftRightIcon className='mr-1' /> Switch Organizations
                     </Link>
                 </DropdownMenuItem>

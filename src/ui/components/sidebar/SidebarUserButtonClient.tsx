@@ -15,6 +15,7 @@ import {
 import { SidebarMenuButton, useSidebar } from 'shadcn/sidebar';
 import { SignOutButton } from 'services/clerk/components/AuthBtns';
 import type { SidebarUserButtonClientProps } from 'types';
+import { userSettingsNotificationsUrl } from 'lib/constants';
 
 function UserInfo({
     user: { email, imageUrl, name },
@@ -81,7 +82,7 @@ export function SidebarUserButtonClient({ user }: SidebarUserButtonClientProps):
                     <UserIcon className='mr-1' /> Profile
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <Link href='/user-settings/notifications'>
+                    <Link href={userSettingsNotificationsUrl}>
                         <SettingsIcon className='mr-1' /> Settings
                     </Link>
                 </DropdownMenuItem>
