@@ -7,8 +7,8 @@ import {
     SidebarGroupLabel,
 } from 'components/shadcn/sidebar';
 import { AppSidebar } from 'components/sidebar/AppSidebar';
-import { SidebarUserButton } from 'components/sidebar/SidebarUserButton';
 import { SidebarNavMenuGroup } from 'components/sidebar/SidebarNavMenuGroup';
+import { SidebarOrganizationButton } from 'components/sidebar/SidebarOrganizationButton';
 
 export default function EmployerLayout({ children }: { children: ReactNode }): React.JSX.Element {
     return (
@@ -39,7 +39,7 @@ export default function EmployerLayout({ children }: { children: ReactNode }): R
                     />
                 </>
             }
-            footerButton={<SidebarUserButton />}
+            footerButton={<SidebarOrganizationButton />}
         >
             {children}
         </AppSidebar>
