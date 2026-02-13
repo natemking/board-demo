@@ -398,7 +398,7 @@ const eslintConfig = defineConfig([
                     allowNullish: false,
                     allowNumber: true,
                     allowRegExp: false,
-                    allowNever: false,
+                    allowNever: true,
                 },
             ],
 
