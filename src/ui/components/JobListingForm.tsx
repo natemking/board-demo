@@ -7,8 +7,20 @@ import { jobListingFormZSchema } from 'lib/zSchema';
 
 export function JobListingForm(): React.JSX.Element {
     const form = useForm({
-        resolver: zodResolver(jobListingFormZSchema)
+        resolver: zodResolver(jobListingFormZSchema),
+        defaultValues: {
+            city: null,
+            description: '',
+            experienceLevel: 'junior',
+            locationRequirements: 'in-office',
+            stateAbbreviation: null,
+            title: '',
+            type: 'full-time',
+            wage: null,
+            wageInterval: 'yearly'
+        }
     })
+    
     return (
         <Form {...form}>
             Enter
