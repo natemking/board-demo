@@ -7,7 +7,7 @@ import { SidebarGroup, SidebarGroupAction, SidebarGroupLabel } from 'components/
 import { AppSidebar } from 'components/sidebar/AppSidebar';
 import { SidebarNavMenuGroup } from 'components/sidebar/SidebarNavMenuGroup';
 import { SidebarOrganizationButton } from 'components/sidebar/SidebarOrganizationButton';
-import { employerJobListingsNew, organizationsSelectUrl } from 'lib/constants';
+import { employerJobListingsNewUrl, organizationsSelectUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 
 export default function EmployerLayout({ children }: { children: ReactNode }): React.JSX.Element {
@@ -33,7 +33,7 @@ async function LayoutSuspense({ children }: { children: ReactNode }): Promise<Re
                             asChild
                             title='Add Listing'
                         >
-                            <Link href={employerJobListingsNew}>
+                            <Link href={employerJobListingsNewUrl}>
                                 <PlusIcon />
                                 <span className='sr-only'>Add Job Listing</span>
                             </Link>

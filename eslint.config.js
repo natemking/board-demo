@@ -304,7 +304,7 @@ const eslintConfig = defineConfig([
             /** No unregistered classes. */
             'better-tailwindcss/no-unregistered-classes': [
                 'warn',
-                { detectComponentClasses: true, ignore: ['mc\\-(.+)'] },
+                { detectComponentClasses: true, ignore: ['mc\\-(.+)', 'toaster'] },
             ],
 
             /** TYPESCRIPT */
@@ -398,7 +398,7 @@ const eslintConfig = defineConfig([
                     allowNullish: false,
                     allowNumber: true,
                     allowRegExp: false,
-                    allowNever: false,
+                    allowNever: true,
                 },
             ],
 

@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@plugin '@tailwindcss/typography';
 
 @custom-variant dark {
     @media (prefers-color-scheme: dark) {
@@ -129,5 +130,24 @@
     }
     body {
         @apply bg-background text-foreground;
+    }
+}
+
+@layer components {
+    .dark-theme {
+        --basePageBg: var(--muted) !important
+    ;
+    }
+    .mdxeditor-root-contenteditable {
+        @apply overflow-hidden rounded-md rounded-t-none border border-input bg-transparent px-3 shadow-xs transition-colors outline-none **:outline-0 disabled:cursor-not-allowed disabled:opacity-50 has-focus-visible:border-ring has-focus-visible:ring-[3px] has-focus-visible:ring-ring/50 dark:bg-input/30;
+    }
+    .mdxeditor-toolbar {
+        @apply flex-wrap rounded-md rounded-b-none! border-card bg-card shadow-sm;
+    }
+    .mdxeditor-popup-container {
+        @apply z-50!;
+    }
+    .markdown-prose {
+        @apply prose max-w-none font-sans prose-neutral dark:prose-invert;
     }
 }

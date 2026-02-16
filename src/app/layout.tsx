@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono as GeistMono } from 'next/font/google';
+import { Toaster } from 'sonner';
 import { ClerkProvider } from 'services/clerk/components/ClerkProvider';
 import './globals.css';
+import '@mdxeditor/editor/style.css'
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -30,6 +32,7 @@ export default function RootLayout({
                     className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
                 >
                     {children}
+                    <Toaster />
                 </body>
             </html>
         </ClerkProvider>

@@ -1,5 +1,6 @@
-import type { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps, ReactNode, Ref } from 'react';
 import type { SignInButton, SignOutButton, SignUpButton } from '@clerk/nextjs';
+import type { MDXEditorMethods, MDXEditorProps } from '@mdxeditor/editor';
 import type { OrganizationTable, UserTable } from 'drizzle/schema';
 import type { CompositionalComponent } from './index';
 
@@ -17,6 +18,13 @@ export type AppSidebarProps = CompositionalComponent & {
     content: ReactNode;
     footerButton: ReactNode;
 };
+export type InternalMarkDownEditorProps = MDXEditorProps & {
+    editorRef?: Ref<MDXEditorMethods>;
+};
+export type LoadingSwapProps = CompositionalComponent & {
+    className?: string;
+    isLoading: boolean;
+}
 export type SidebarNavGroupProps = {
     className?: string;
     items: {
