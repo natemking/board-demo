@@ -21,6 +21,10 @@ export type AppSidebarProps = CompositionalComponent & {
 export type InternalMarkDownEditorProps = MDXEditorProps & {
     editorRef?: Ref<MDXEditorMethods>;
 };
+export type LoadingSwapProps = CompositionalComponent & {
+    className?: string;
+    isLoading: boolean;
+}
 export type SidebarNavGroupProps = {
     className?: string;
     items: {

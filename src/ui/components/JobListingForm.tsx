@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type z from 'zod';
+import { LoadingSwap } from 'components/LoadingSwap';
 import {
     experienceLevels,
     jobListingTypes,
@@ -10,6 +11,7 @@ import {
     wageIntervals,
 } from 'drizzle/schema';
 import { MarkdownEditor } from 'components/markdown/MarkdownEditor';
+import { Button } from 'components/shadcn/button';
 import {
     Form,
     FormControl,
@@ -35,7 +37,6 @@ import {
 } from 'lib/utils';
 import states from 'lib/states.json';
 import { jobListingFormZSchema } from 'lib/zSchema';
-import { Button } from 'components/shadcn/button';
 
 const NONE_SELECT_VALUE = 'none';
 
@@ -55,8 +56,11 @@ export function JobListingForm(): React.JSX.Element {
         },
     });
 
-    const onSubmit = (data: z.infer<typeof jobListingFormZSchema>) => {
+    const onSubmit = async (data: z.infer<typeof jobListingFormZSchema>): Promise<void> => {
         console.log(data);
+        await new Promise(res => {
+            setTimeout(res, 2000);
+        });
     };
 
     return (
@@ -317,7 +321,9 @@ export function JobListingForm(): React.JSX.Element {
                     disabled={form.formState.isSubmitting}
                     type='submit'
                 >
-                    Create Job Listing
+                    <LoadingSwap isLoading={form.formState.isSubmitting}>
+                        Create Job Listing
+                    </LoadingSwap>
                 </Button>
             </form>
         </Form>
