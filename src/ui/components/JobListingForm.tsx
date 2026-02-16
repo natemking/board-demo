@@ -35,6 +35,7 @@ import {
 } from 'lib/utils';
 import states from 'lib/states.json';
 import { jobListingFormZSchema } from 'lib/zSchema';
+import { Button } from 'components/shadcn/button';
 
 const NONE_SELECT_VALUE = 'none';
 
@@ -310,6 +311,13 @@ export function JobListingForm(): React.JSX.Element {
                         </FormItem>
                     )}
                 />
+                <Button
+                    className='w-full'
+                    disabled={form.formState.isSubmitting}
+                    type='submit'
+                >
+                    Create Job Listing
+                </Button>
             </form>
         </Form>
     );
