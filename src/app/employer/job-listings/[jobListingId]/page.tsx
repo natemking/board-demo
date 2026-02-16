@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
+import { Badge } from 'components/shadcn/badge';
 import { getJobListingById } from 'lib/actions';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
+import { formatJobListingsStatus, formatJobListingsType } from 'lib/utils';
 import type { JobListingPageProps } from 'types';
 
 export default function JobListingPage(props: JobListingPageProps): React.JSX.Element {
@@ -23,7 +25,7 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
 
     if (!jobListing) return notFound();
 
-    const { title } =
+    const { status, title, type } =
         jobListing;
 
     return (
@@ -32,7 +34,8 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
                 <div>
                     <h1 className='text-2xl font-bold tracking-tight'>{title}</h1>
                     <div className='flex flex-wrap gap-2 mt-2'>
-
+                        <Badge>{formatJobListingsStatus(status)}</Badge>
+                        <Badge>{formatJobListingsType(type)}</Badge>
                     </div>
                 </div>
             </div>

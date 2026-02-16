@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import { clsx, type ClassValue } from 'clsx';
-import type { ExperienceLevel, JobListingType, LocationRequirement, WageInterval } from 'drizzle/schema';
+import type { ExperienceLevel, JobListingStatus, JobListingType, LocationRequirement, WageInterval } from 'drizzle/schema';
 
 export function cn(...inputs: ClassValue[]): string {
     return twMerge(clsx(inputs));
@@ -60,5 +60,20 @@ export function formatExperienceLevel(
             return 'Senior';
         default:
             throw new Error(`Invalid experience level: ${level satisfies never}`);
+    }
+}
+
+export function formatJobListingsStatus(
+    status: JobListingStatus
+) {
+    switch (status) {
+        case 'delisted':
+            return 'Delisted';
+        case 'draft':
+            return 'Draft';
+        case 'published':
+            return 'Published';
+        default:
+            throw new Error(`Invalid job listing status: ${status satisfies never}`);
     }
 }
