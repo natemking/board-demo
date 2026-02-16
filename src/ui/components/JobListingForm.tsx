@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type z from 'zod';
+import { toast } from 'sonner'
 import { LoadingSwap } from 'components/LoadingSwap';
 import {
     experienceLevels,
@@ -59,7 +60,11 @@ export function JobListingForm(): React.JSX.Element {
 
     const onSubmit = async (data: z.infer<typeof jobListingFormZSchema>): Promise<void> => {
         const res = await createJobListing(data)
-        console.log(res);
+        if (res.error) {
+            toast.error(res.message)
+        }
+
+
     };
 
     return (

@@ -11,6 +11,7 @@ import { getJobListingsOrganizationTag } from 'db/cache/jobListings';
 import { employerJobListingsUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { jobListingFormZSchema } from 'lib/zSchema';
+import type { BasicError } from 'types';
 
 export async function getMostRecentJobListingByOrgId(
     orgId: string
@@ -26,7 +27,9 @@ export async function getMostRecentJobListingByOrgId(
     });
 }
 
-export async function createJobListing(unsafeData: z.infer<typeof jobListingFormZSchema>) {
+export async function createJobListing(
+    unsafeData: z.infer<typeof jobListingFormZSchema>
+): Promise<BasicError> {
     const { orgId } = await getCurrentOrganization();
 
     if (!orgId) {
@@ -54,4 +57,3 @@ export async function createJobListing(unsafeData: z.infer<typeof jobListingForm
 
     redirect(`${employerJobListingsUrl}/${jobListing.id}`);
 }
- 
