@@ -197,6 +197,7 @@ export function JobListingForm(): React.JSX.Element {
                                             ))}
                                         </SelectContent>
                                     </Select>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />

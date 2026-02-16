@@ -7,13 +7,14 @@ import {
 } from 'drizzle/schema';
 
 const commonErrMsgs = {
+    required: 'Required',
     requireForNonRemote: 'Required for non-remote listings.'
 } as const
 
 export const jobListingFormZSchema = z
     .object({
-        title: z.string().min(1),
-        description: z.string().min(1),
+        title: z.string().min(1, {message: commonErrMsgs.required }),
+        description: z.string().min(1, {message: commonErrMsgs.required }),
         experienceLevel: z.enum(experienceLevels),
         locationRequirements: z.enum(locationRequirements),
         type: z.enum(jobListingTypes),
