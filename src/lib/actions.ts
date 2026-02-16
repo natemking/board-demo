@@ -3,11 +3,11 @@
 import { redirect } from 'next/navigation';
 import { cacheTag } from 'next/cache';
 import type z from 'zod';
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { db } from 'drizzle/db';
 import { JobListingTable } from 'drizzle/schema';
 import { insertJobListing } from 'db/jobListings';
-import { getJobListingsOrganizationTag } from 'db/cache/jobListings';
+import { getJobListingsIdTag, getJobListingsOrganizationTag } from 'db/cache/jobListings';
 import { employerJobListingsUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { jobListingFormZSchema } from 'lib/zSchema';
@@ -56,4 +56,20 @@ export async function createJobListing(
     });
 
     redirect(`${employerJobListingsUrl}/${jobListing.id}`);
+}
+
+export async function getJobListingById(
+    jobListingId: string,
+    orgId: string
+): Promise<typeof JobListingTable.$inferSelect | undefined> {
+    'use cache';
+
+    cacheTag(getJobListingsIdTag(jobListingId));
+
+    return db.query.JobListingTable.findFirst({
+        where: and(
+            eq(JobListingTable.id, jobListingId), 
+            eq(JobListingTable.organizationId, orgId)
+        ),
+    });
 }
