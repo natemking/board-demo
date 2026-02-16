@@ -37,6 +37,7 @@ import {
 } from 'lib/utils';
 import states from 'lib/states.json';
 import { jobListingFormZSchema } from 'lib/zSchema';
+import { createJobListing } from 'lib/actions';
 
 const NONE_SELECT_VALUE = 'none';
 
@@ -47,7 +48,7 @@ export function JobListingForm(): React.JSX.Element {
             city: null,
             description: '',
             experienceLevel: 'junior',
-            locationRequirements: 'in-office',
+            locationRequirement: 'in-office',
             stateAbbreviation: null,
             title: '',
             type: 'full-time',
@@ -57,10 +58,8 @@ export function JobListingForm(): React.JSX.Element {
     });
 
     const onSubmit = async (data: z.infer<typeof jobListingFormZSchema>): Promise<void> => {
-        console.log(data);
-        await new Promise(res => {
-            setTimeout(res, 2000);
-        });
+        const res = await createJobListing(data)
+        console.log(res);
     };
 
     return (
@@ -208,7 +207,7 @@ export function JobListingForm(): React.JSX.Element {
                     </div>
                     <FormField
                         control={form.control}
-                        name='locationRequirements'
+                        name='locationRequirement'
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Location Requirement</FormLabel>

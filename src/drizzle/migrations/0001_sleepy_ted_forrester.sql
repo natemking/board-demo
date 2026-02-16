@@ -1,0 +1,1 @@
+ALTER TABLE "job_listings" RENAME COLUMN "iseFeatured" TO "isFeatured";

@@ -16,7 +16,7 @@ export const jobListingFormZSchema = z
         title: z.string().min(1, {message: commonErrMsgs.required }),
         description: z.string().min(1, {message: commonErrMsgs.required }),
         experienceLevel: z.enum(experienceLevels),
-        locationRequirements: z.enum(locationRequirements),
+        locationRequirement: z.enum(locationRequirements),
         type: z.enum(jobListingTypes),
         wage: z.number().int().positive().min(1).nullable(),
         wageInterval: z.enum(wageIntervals).nullable(),
@@ -31,7 +31,7 @@ export const jobListingFormZSchema = z
     })
     .refine(
         listing => {
-            return listing.locationRequirements === 'remote' || listing.city !== null;
+            return listing.locationRequirement === 'remote' || listing.city !== null;
         },
         {
             message: commonErrMsgs.requireForNonRemote,
@@ -40,7 +40,7 @@ export const jobListingFormZSchema = z
     )
     .refine(
         listing => {
-            return listing.locationRequirements === 'remote' || listing.stateAbbreviation !== null;
+            return listing.locationRequirement === 'remote' || listing.stateAbbreviation !== null;
         },
         {
             message: commonErrMsgs.requireForNonRemote,

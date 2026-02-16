@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
-import { employerJobListings, employerJobListingsNew } from 'lib/constants';
+import { employerJobListingsUrl, employerJobListingsNewUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { getMostRecentJobListingByOrgId } from 'lib/actions';
 
@@ -19,7 +19,7 @@ async function SuspendedPage(): Promise<React.JSX.Element | null> {
 
     const jobListing = await getMostRecentJobListingByOrgId(orgId);
 
-    if (!jobListing) redirect(employerJobListingsNew);
+    if (!jobListing) redirect(employerJobListingsNewUrl);
 
-    redirect(`${employerJobListings}/${jobListing.id}`);
+    redirect(`${employerJobListingsUrl}/${jobListing.id}`);
 }
