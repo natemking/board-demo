@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type z from 'zod';
-import { wageIntervals } from 'drizzle/schema';
+import { locationRequirements, wageIntervals } from 'drizzle/schema';
 import {
     Form,
     FormControl,
@@ -21,7 +21,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from 'components/shadcn/select';
-import { formatWageInterval } from 'lib/utils';
+import { formatLocationRequirement, formatWageInterval } from 'lib/utils';
 import states from 'lib/states.json';
 import { jobListingFormZSchema } from 'lib/zSchema';
 
@@ -191,58 +191,31 @@ export function JobListingForm(): React.JSX.Element {
                     </div>
                     <FormField
                         control={form.control}
-                        name='wage'
+                        name='locationRequirements'
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Wage</FormLabel>
-                                <div className='flex'>
+                                <FormLabel>Location Requirement</FormLabel>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    value={field.value}
+                                >
                                     <FormControl>
-                                        <Input
-                                            className='rounded-r-none'
-                                            {...field}
-                                            onChange={e => {
-                                                const { valueAsNumber } = e.target;
-
-                                                field.onChange(
-                                                    isNaN(valueAsNumber) ? null : valueAsNumber
-                                                );
-                                            }}
-                                            type='number'
-                                            value={field.value ?? ''}
-                                        />
+                                        <SelectTrigger className='w-full'>
+                                            <SelectValue />
+                                        </SelectTrigger>
                                     </FormControl>
-                                    <FormField
-                                        control={form.control}
-                                        name='wageInterval'
-                                        render={({ field: intervalField }) => (
-                                            <FormItem>
-                                                <Select
-                                                    onValueChange={intervalField.onChange}
-                                                    value={intervalField.value ?? ''}
-                                                >
-                                                    <FormControl>
-                                                        <SelectTrigger className='rounded-l-none capitalize'>
-                                                            / <SelectValue />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        {wageIntervals.map(interval => (
-                                                            <SelectItem
-                                                                className='capitalize'
-                                                                key={interval}
-                                                                value={interval}
-                                                            >
-                                                                {formatWageInterval(interval)}
-                                                            </SelectItem>
-                                                        ))}
-                                                    </SelectContent>
-                                                </Select>
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-                                <FormDescription>Optional</FormDescription>
-                                <FormMessage />
+                                    <SelectContent>
+                                        {locationRequirements.map(lr => (
+                                            <SelectItem
+                                                className='capitalize'
+                                                key={lr}
+                                                value={lr}
+                                            >
+                                                {formatLocationRequirement(lr)}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </FormItem>
                         )}
                     />
