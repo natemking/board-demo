@@ -1,7 +1,8 @@
+import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
+import { getJobListingById } from 'lib/actions';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import type { JobListingPageProps } from 'types';
-import { getJobListingById } from 'lib/actions';
 
 export default function JobListingPage(props: JobListingPageProps): React.JSX.Element {
     return (
@@ -20,5 +21,21 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
 
     const jobListing = await getJobListingById(jobListingId, orgId);
 
-    return <pre>{JSON.stringify(jobListing, null, 2)}</pre>;
+    if (!jobListing) return notFound();
+
+    const { title } =
+        jobListing;
+
+    return (
+        <div className='@container mx-auto max-w-6xl space-y-6 p-4'>
+            <div className='flex items-center justify-between gap-4 @max-4xl:flex-col @max-4xl:items-start'>
+                <div>
+                    <h1 className='text-2xl font-bold tracking-tight'>{title}</h1>
+                    <div className='flex flex-wrap gap-2 mt-2'>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }
