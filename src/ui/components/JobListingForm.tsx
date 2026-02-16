@@ -3,7 +3,12 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type z from 'zod';
-import { locationRequirements, wageIntervals } from 'drizzle/schema';
+import {
+    experienceLevels,
+    jobListingTypes,
+    locationRequirements,
+    wageIntervals,
+} from 'drizzle/schema';
 import {
     Form,
     FormControl,
@@ -21,7 +26,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from 'components/shadcn/select';
-import { formatLocationRequirement, formatWageInterval } from 'lib/utils';
+import {
+    formatExperienceLevel,
+    formatJobListingsType,
+    formatLocationRequirement,
+    formatWageInterval,
+} from 'lib/utils';
 import states from 'lib/states.json';
 import { jobListingFormZSchema } from 'lib/zSchema';
 
@@ -212,6 +222,69 @@ export function JobListingForm(): React.JSX.Element {
                                                 value={lr}
                                             >
                                                 {formatLocationRequirement(lr)}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormItem>
+                        )}
+                    />
+                </div>
+                <div className='grid grid-cols-1 items-start gap-x-4 gap-y-6 @md:grid-cols-2'>
+                    <FormField
+                        control={form.control}
+                        name='type'
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Job Type</FormLabel>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    value={field.value}
+                                >
+                                    <FormControl>
+                                        <SelectTrigger className='w-full'>
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {jobListingTypes.map(type => (
+                                            <SelectItem
+                                                className='capitalize'
+                                                key={type}
+                                                value={type}
+                                            >
+                                                {formatJobListingsType(type)}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name='experienceLevel'
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Experience Level</FormLabel>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    value={field.value}
+                                >
+                                    <FormControl>
+                                        <SelectTrigger className='w-full'>
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {experienceLevels.map(level => (
+                                            <SelectItem
+                                                className='capitalize'
+                                                key={level}
+                                                value={level}
+                                            >
+                                                {formatExperienceLevel(level)}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
