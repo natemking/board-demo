@@ -133,8 +133,23 @@
     }
 }
 
-/* @layer components {
-    .markdown {
-        @apply max-w-none prose prose-neutral dark:prose-invert font-sans
+@layer components {
+    .mdxeditor-root-contenteditable {
+        @apply overflow-hidden rounded-md rounded-t-none border border-input bg-transparent px-3 shadow-xs transition-colors outline-none disabled:cursor-not-allowed disabled:opacity-50 has-focus-visible:border-ring has-focus-visible:ring-[3px] has-focus-visible:ring-ring/50 dark:bg-input/30 **:outline-0;
     }
-} */
+    .mdxeditor-toolbar {
+        @apply bg-card border-card rounded-md rounded-b-none! shadow-sm flex-wrap
+    } 
+    .mdxeditor-popup-container {
+        @apply z-50! 
+    }
+    .markdown-prose {
+        @apply prose max-w-none font-sans prose-neutral dark:prose-invert;
+    }
+}
+
+@layer utilities {
+    .dark-theme {
+        --basePageBg: var(--muted) !important
+    }
+}

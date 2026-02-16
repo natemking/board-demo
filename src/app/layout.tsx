@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono as GeistMono } from 'next/font/google';
 import { ClerkProvider } from 'services/clerk/components/ClerkProvider';
 import './globals.css';
+import '@mdxeditor/editor/style.css'
 
 const geistSans = Geist({
     variable: '--font-geist-sans',

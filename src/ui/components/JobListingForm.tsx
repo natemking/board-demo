@@ -9,6 +9,7 @@ import {
     locationRequirements,
     wageIntervals,
 } from 'drizzle/schema';
+import { MarkdownEditor } from 'components/markdown/MarkdownEditor';
 import {
     Form,
     FormControl,
@@ -293,17 +294,22 @@ export function JobListingForm(): React.JSX.Element {
                         )}
                     />
                 </div>
-                {/* <FormField control={form.control} name='description' 
+                <FormField
+                    control={form.control}
+                    name='description'
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Description</FormLabel>
                             <FormControl>
-                                <MarkdownEditor {...field} markdown={field.value}/>
+                                <MarkdownEditor
+                                    {...field}
+                                    markdown={field.value}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
-                /> */}
+                />
             </form>
         </Form>
     );
