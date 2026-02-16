@@ -25,6 +25,8 @@ import { formatWageInterval } from 'lib/utils';
 import states from 'lib/states.json';
 import { jobListingFormZSchema } from 'lib/zSchema';
 
+const NONE_SELECT_VALUE = 'none';
+
 export function JobListingForm(): React.JSX.Element {
     const form = useForm({
         resolver: zodResolver(jobListingFormZSchema),
@@ -152,7 +154,9 @@ export function JobListingForm(): React.JSX.Element {
                                 <FormItem>
                                     <FormLabel>State</FormLabel>
                                     <Select
-                                        onValueChange={field.onChange}
+                                        onValueChange={val => {
+                                            field.onChange(val === NONE_SELECT_VALUE ? null : val);
+                                        }}
                                         value={field.value ?? ''}
                                     >
                                         <FormControl>
@@ -161,6 +165,15 @@ export function JobListingForm(): React.JSX.Element {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
+                                            {field.value !== null ? (
+                                                <SelectItem
+                                                    className='text-muted-foreground'
+                                                    value={NONE_SELECT_VALUE}
+                                                >
+                                                    Clear
+                                                </SelectItem>
+                                            ) : null}
+
                                             {Object.entries(states).map(([abbrev, state]) => (
                                                 <SelectItem
                                                     className='capitalize'
