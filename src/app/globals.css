@@ -131,3 +131,9 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* @layer components {
+    .markdown {
+        @apply max-w-none prose prose-neutral dark:prose-invert font-sans
+    }
+} */
