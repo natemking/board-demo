@@ -21,8 +21,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from 'components/shadcn/select';
-import { jobListingFormZSchema } from 'lib/zSchema';
 import { formatWageInterval } from 'lib/utils';
+import states from 'lib/states.json';
+import { jobListingFormZSchema } from 'lib/zSchema';
 
 export function JobListingForm(): React.JSX.Element {
     const form = useForm({
@@ -64,6 +65,117 @@ export function JobListingForm(): React.JSX.Element {
                             </FormItem>
                         )}
                     />
+                    <FormField
+                        control={form.control}
+                        name='wage'
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Wage</FormLabel>
+                                <div className='flex'>
+                                    <FormControl>
+                                        <Input
+                                            className='rounded-r-none'
+                                            {...field}
+                                            onChange={e => {
+                                                const { valueAsNumber } = e.target;
+
+                                                field.onChange(
+                                                    isNaN(valueAsNumber) ? null : valueAsNumber
+                                                );
+                                            }}
+                                            type='number'
+                                            value={field.value ?? ''}
+                                        />
+                                    </FormControl>
+                                    <FormField
+                                        control={form.control}
+                                        name='wageInterval'
+                                        render={({ field: intervalField }) => (
+                                            <FormItem>
+                                                <Select
+                                                    onValueChange={val => {
+                                                        intervalField.onChange(
+                                                            val === '' ? null : val
+                                                        );
+                                                    }}
+                                                    value={intervalField.value ?? ''}
+                                                >
+                                                    <FormControl>
+                                                        <SelectTrigger className='rounded-l-none capitalize'>
+                                                            / <SelectValue />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent>
+                                                        {wageIntervals.map(interval => (
+                                                            <SelectItem
+                                                                className='capitalize'
+                                                                key={interval}
+                                                                value={interval}
+                                                            >
+                                                                {formatWageInterval(interval)}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                                <FormDescription>Optional</FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+                <div className='grid grid-cols-1 items-start gap-x-4 gap-y-6 @md:grid-cols-2'>
+                    <div className='grid grid-cols-1 items-start gap-x-2 gap-y-6 @xs:grid-cols-2'>
+                        <FormField
+                            control={form.control}
+                            name='city'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>City</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            value={field.value ?? ''}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name='stateAbbreviation'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>State</FormLabel>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        value={field.value ?? ''}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger className='w-full'>
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {Object.entries(states).map(([abbrev, state]) => (
+                                                <SelectItem
+                                                    className='capitalize'
+                                                    key={abbrev}
+                                                    value={abbrev}
+                                                >
+                                                    {state}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </FormItem>
+                            )}
+                        />
+                    </div>
                     <FormField
                         control={form.control}
                         name='wage'
