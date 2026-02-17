@@ -39,6 +39,11 @@ export type LoadingSwapProps = CompositionalComponent & {
     className?: string;
     isLoading: boolean;
 };
+export type MarkdownPartialProps = {
+    dialogMarkdown: ReactNode;
+    dialogTitle: string;
+    mainMarkdown: ReactNode;
+}
 export type MarkdownRendererProps = MDXRemoteProps & {
     className?: string,
 }
