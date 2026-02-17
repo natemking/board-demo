@@ -38,7 +38,7 @@ import {
 } from 'lib/utils';
 import states from 'lib/states.json';
 import { jobListingFormZSchema } from 'lib/zSchema';
-import { createJobListing } from 'lib/actions';
+import { createJobListing, updateJobListing } from 'lib/actions';
 import type { JobListingFormProps } from 'types';
 
 const NONE_SELECT_VALUE = 'none';
@@ -61,7 +61,9 @@ export function JobListingForm({ jobListing }: JobListingFormProps): React.JSX.E
     });
 
     const onSubmit = async (data: z.infer<typeof jobListingFormZSchema>): Promise<void> => {
-        const res = await createJobListing(data);
+        const action = jobListing ? updateJobListing.bind(null, jobListing.id) : createJobListing
+
+        const res = await action(data);
         if (res.error) {
             toast.error(res.message);
         }
@@ -326,7 +328,7 @@ export function JobListingForm({ jobListing }: JobListingFormProps): React.JSX.E
                     type='submit'
                 >
                     <LoadingSwap isLoading={form.formState.isSubmitting}>
-                        Create Job Listing
+                        {`${jobListing ? 'Edit' : 'Create'} Job Listing`}
                     </LoadingSwap>
                 </Button>
             </form>
