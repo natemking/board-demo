@@ -1,7 +1,7 @@
 import type { ComponentProps, ReactNode, Ref } from 'react';
 import type { SignInButton, SignOutButton, SignUpButton } from '@clerk/nextjs';
 import type { MDXEditorMethods, MDXEditorProps } from '@mdxeditor/editor';
-import type { OrganizationTable, UserTable } from 'drizzle/schema';
+import type { JobListingTable, OrganizationTable, UserTable } from 'drizzle/schema';
 import type { CompositionalComponent } from './index';
 
 // clerk components
@@ -21,10 +21,23 @@ export type AppSidebarProps = CompositionalComponent & {
 export type InternalMarkDownEditorProps = MDXEditorProps & {
     editorRef?: Ref<MDXEditorMethods>;
 };
+export type JobListingBadgesProps = {
+    jobListing: Pick<
+        typeof JobListingTable.$inferSelect,
+        | 'city'
+        | 'experienceLevel'
+        | 'isFeatured'
+        | 'locationRequirement'
+        | 'stateAbbreviation'
+        | 'type'
+        | 'wage'
+        | 'wageInterval'
+    >;
+} & { className?: string};
 export type LoadingSwapProps = CompositionalComponent & {
     className?: string;
     isLoading: boolean;
-}
+};
 export type SidebarNavGroupProps = {
     className?: string;
     items: {

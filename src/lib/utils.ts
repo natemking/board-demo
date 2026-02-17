@@ -1,6 +1,12 @@
 import { twMerge } from 'tailwind-merge';
 import { clsx, type ClassValue } from 'clsx';
-import type { ExperienceLevel, JobListingStatus, JobListingType, LocationRequirement, WageInterval } from 'drizzle/schema';
+import type {
+    ExperienceLevel,
+    JobListingStatus,
+    JobListingType,
+    LocationRequirement,
+    WageInterval,
+} from 'drizzle/schema';
 
 export function cn(...inputs: ClassValue[]): string {
     return twMerge(clsx(inputs));
@@ -12,7 +18,6 @@ export function formatWageInterval(interval: WageInterval): 'Hour' | 'Year' {
             return 'Hour';
         case 'yearly':
             return 'Year';
-
         default:
             throw new Error(`Invalid wage interval: ${interval satisfies never}`);
     }
@@ -48,9 +53,7 @@ export function formatJobListingsType(
     }
 }
 
-export function formatExperienceLevel(
-    level: ExperienceLevel
-): 'Junior' | 'Mid Level' | 'Senior' {
+export function formatExperienceLevel(level: ExperienceLevel): 'Junior' | 'Mid Level' | 'Senior' {
     switch (level) {
         case 'junior':
             return 'Junior';
@@ -65,7 +68,7 @@ export function formatExperienceLevel(
 
 export function formatJobListingsStatus(
     status: JobListingStatus
-) {
+): 'Delisted' | 'Draft' | 'Published' {
     switch (status) {
         case 'delisted':
             return 'Delisted';
@@ -76,4 +79,37 @@ export function formatJobListingsStatus(
         default:
             throw new Error(`Invalid job listing status: ${status satisfies never}`);
     }
+}
+
+export function formatWage(wage: number, wageInterval: WageInterval): string {
+    const wageFormatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+    });
+
+    switch (wageInterval) {
+        case 'hourly':
+            return `${wageFormatter.format(wage)} / hr`;
+        case 'yearly':
+            return wageFormatter.format(wage);
+        default:
+            throw new Error(`Invalid wage interval: ${wageInterval satisfies never}`);
+    }
+}
+
+export function formatJobListingLocation({
+    stateAbbreviation,
+    city,
+}: {
+    stateAbbreviation: string | null;
+    city: string | null;
+}): string {
+    if (!stateAbbreviation && !city) return 'None';
+
+    const locationParts = [];
+    if (city) locationParts.push(city);
+    if (stateAbbreviation) locationParts.push(stateAbbreviation);
+
+    return locationParts.join(', ');
 }
