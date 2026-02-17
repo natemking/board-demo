@@ -10,6 +10,8 @@ import { employerJobListingsEditUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { formatJobListingsStatus } from 'lib/utils';
 import type { JobListingPageProps } from 'types';
+import { MarkdownPartial } from 'components/markdown/MarkdownPartial';
+import { MarkdownRenderer } from 'components/markdown/MarkdownRenderer';
 
 export default function JobListingPage(props: JobListingPageProps): React.JSX.Element {
     return (
@@ -30,7 +32,7 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
 
     if (!jobListing) return notFound();
 
-    const { id, status, title } = jobListing;
+    const { id, description, status, title } = jobListing;
 
     return (
         <div className='@container mx-auto max-w-6xl space-y-6 p-4'>
@@ -51,6 +53,21 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
                     </Button>
                 </div>
             </div>
+
+            <MarkdownPartial 
+                dialogMarkdown={
+                    <MarkdownRenderer 
+                        source={description}
+                    />
+                }
+                dialogTitle='Description'
+                mainMarkdown={
+                    <MarkdownRenderer 
+                        className='prose-sm'
+                        source={description}
+                    />
+                }
+            />
         </div>
     );
 }
