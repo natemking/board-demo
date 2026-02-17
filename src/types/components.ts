@@ -39,6 +39,9 @@ export type LoadingSwapProps = CompositionalComponent & {
     className?: string;
     isLoading: boolean;
 };
+export type JobListingFormProps = {
+    jobListing?: typeof JobListingTable.$inferSelect
+}
 export type MarkdownPartialProps = {
     dialogMarkdown: ReactNode;
     dialogTitle: string;

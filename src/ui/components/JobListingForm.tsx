@@ -39,10 +39,11 @@ import {
 import states from 'lib/states.json';
 import { jobListingFormZSchema } from 'lib/zSchema';
 import { createJobListing } from 'lib/actions';
+import type { JobListingFormProps } from 'types';
 
 const NONE_SELECT_VALUE = 'none';
 
-export function JobListingForm(): React.JSX.Element {
+export function JobListingForm({ jobListing }: JobListingFormProps): React.JSX.Element {
     const form = useForm({
         resolver: zodResolver(jobListingFormZSchema),
         defaultValues: {

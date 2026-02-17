@@ -33,5 +33,5 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
 
     if (!jobListing) return notFound();
 
-    return <JobListingForm />;
+    return <JobListingForm jobListing={jobListing}/>;
 }
