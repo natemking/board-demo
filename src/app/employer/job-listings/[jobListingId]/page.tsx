@@ -1,8 +1,12 @@
-import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { EditIcon } from 'lucide-react';
 import { JobListingBadges } from 'components/JobListingBadges';
 import { Badge } from 'components/shadcn/badge';
+import { Button } from 'components/shadcn/button';
 import { getJobListingById } from 'lib/actions';
+import { employerJobListingsEditUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { formatJobListingsStatus } from 'lib/utils';
 import type { JobListingPageProps } from 'types';
@@ -26,7 +30,7 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
 
     if (!jobListing) return notFound();
 
-    const { status, title } = jobListing;
+    const { id, status, title } = jobListing;
 
     return (
         <div className='@container mx-auto max-w-6xl space-y-6 p-4'>
@@ -37,6 +41,14 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
                         <Badge>{formatJobListingsStatus(status)}</Badge>
                         <JobListingBadges jobListing={jobListing} />
                     </div>
+                </div>
+                <div className='flex items-center gap-2 empty:-mt-4'>
+                    <Button asChild variant='outline'>
+                        <Link href={employerJobListingsEditUrl.replace('[jobListingId]', id)}>
+                            <EditIcon className='size-4' />
+                            Edit
+                        </Link>
+                    </Button>
                 </div>
             </div>
         </div>
