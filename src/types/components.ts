@@ -1,7 +1,7 @@
 import type { ComponentProps, ReactNode, Ref } from 'react';
 import type { SignInButton, SignOutButton, SignUpButton } from '@clerk/nextjs';
 import type { MDXEditorMethods, MDXEditorProps } from '@mdxeditor/editor';
-import type { MDXRemoteProps } from 'next-mdx-remote/rsc'
+import type { MDXRemoteProps } from 'next-mdx-remote/rsc';
 import type { JobListingTable, OrganizationTable, UserTable } from 'drizzle/schema';
 import type { CompositionalComponent } from './index';
 // clerk components
@@ -34,22 +34,34 @@ export type JobListingBadgesProps = {
         | 'wage'
         | 'wageInterval'
     >;
-} & { className?: string};
+} & { className?: string };
 export type LoadingSwapProps = CompositionalComponent & {
     className?: string;
     isLoading: boolean;
 };
 export type JobListingFormProps = {
-    jobListing?: typeof JobListingTable.$inferSelect
-}
+    jobListing?: Pick<
+        typeof JobListingTable.$inferSelect,
+        | 'city'
+        | 'description'
+        | 'experienceLevel'
+        | 'id'
+        | 'locationRequirement'
+        | 'stateAbbreviation'
+        | 'title'
+        | 'type'
+        | 'wage'
+        | 'wageInterval'
+    >;
+};
 export type MarkdownPartialProps = {
     dialogMarkdown: ReactNode;
     dialogTitle: string;
     mainMarkdown: ReactNode;
-}
+};
 export type MarkdownRendererProps = MDXRemoteProps & {
-    className?: string,
-}
+    className?: string;
+};
 export type SidebarNavGroupProps = {
     className?: string;
     items: {

@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type z from 'zod';
-import { toast } from 'sonner'
+import { toast } from 'sonner';
 import { LoadingSwap } from 'components/LoadingSwap';
 import {
     experienceLevels,
@@ -44,9 +44,10 @@ import type { JobListingFormProps } from 'types';
 const NONE_SELECT_VALUE = 'none';
 
 export function JobListingForm({ jobListing }: JobListingFormProps): React.JSX.Element {
+
     const form = useForm({
         resolver: zodResolver(jobListingFormZSchema),
-        defaultValues: {
+        defaultValues: jobListing ?? {
             city: null,
             description: '',
             experienceLevel: 'junior',
@@ -60,12 +61,10 @@ export function JobListingForm({ jobListing }: JobListingFormProps): React.JSX.E
     });
 
     const onSubmit = async (data: z.infer<typeof jobListingFormZSchema>): Promise<void> => {
-        const res = await createJobListing(data)
+        const res = await createJobListing(data);
         if (res.error) {
-            toast.error(res.message)
+            toast.error(res.message);
         }
-
-
     };
 
     return (
