@@ -19,6 +19,11 @@ export type AppSidebarProps = CompositionalComponent & {
     content: ReactNode;
     footerButton: ReactNode;
 };
+export type AsyncIfProps =  CompositionalComponent & {
+    condition: () => Promise<boolean>;
+    loadingFallback?: ReactNode;
+    otherwise?: ReactNode;
+}
 export type InternalMarkDownEditorProps = MDXEditorProps & {
     editorRef?: Ref<MDXEditorMethods>;
 };
