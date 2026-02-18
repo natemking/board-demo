@@ -12,6 +12,8 @@ import { formatJobListingsStatus } from 'lib/utils';
 import type { JobListingPageProps } from 'types';
 import { MarkdownPartial } from 'components/markdown/MarkdownPartial';
 import { MarkdownRenderer } from 'components/markdown/MarkdownRenderer';
+import { AsyncIf } from 'components/AsyncIf';
+import { hasOrgUserPermissions } from 'lib/services/clerk/orgUserPermissions';
 
 export default function JobListingPage(props: JobListingPageProps): React.JSX.Element {
     return (
@@ -45,12 +47,16 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
                     </div>
                 </div>
                 <div className='flex items-center gap-2 empty:-mt-4'>
-                    <Button asChild variant='outline'>
-                        <Link href={employerJobListingsEditUrl.replace('[jobListingId]', id)}>
-                            <EditIcon className='size-4' />
-                            Edit
-                        </Link>
-                    </Button>
+                   <AsyncIf 
+                        condition={() => hasOrgUserPermissions('org:job_listings:update')}
+                   >
+                        <Button asChild variant='outline'>
+                            <Link href={employerJobListingsEditUrl.replace('[jobListingId]', id)}>
+                                <EditIcon className='size-4' />
+                                Edit
+                            </Link>
+                        </Button>
+                   </AsyncIf>
                 </div>
             </div>
 
