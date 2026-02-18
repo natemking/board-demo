@@ -2,18 +2,22 @@ import { Suspense } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { EditIcon } from 'lucide-react';
+import { AsyncIf } from 'components/AsyncIf';
 import { JobListingBadges } from 'components/JobListingBadges';
+import { MarkdownRenderer } from 'components/markdown/MarkdownRenderer';
+import { MarkdownPartial } from 'components/markdown/MarkdownPartial';
 import { Badge } from 'components/shadcn/badge';
 import { Button } from 'components/shadcn/button';
-import { getJobListingById } from 'lib/actions';
+import { getJobListingById, hasReachedMaxFeaturedJobListings } from 'lib/actions';
 import { employerJobListingsEditUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
-import { formatJobListingsStatus } from 'lib/utils';
-import type { JobListingPageProps } from 'types';
-import { MarkdownPartial } from 'components/markdown/MarkdownPartial';
-import { MarkdownRenderer } from 'components/markdown/MarkdownRenderer';
-import { AsyncIf } from 'components/AsyncIf';
 import { hasOrgUserPermissions } from 'lib/services/clerk/orgUserPermissions';
+import {
+    formatJobListingsStatus,
+    getNextJobListingStatus,
+} from 'lib/utils';
+import type { JobListingPageProps } from 'types';
+import type { JobListingStatus } from 'drizzle/schema';
 
 export default function JobListingPage(props: JobListingPageProps): React.JSX.Element {
     return (
@@ -47,33 +51,52 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
                     </div>
                 </div>
                 <div className='flex items-center gap-2 empty:-mt-4'>
-                   <AsyncIf 
-                        condition={() => hasOrgUserPermissions('org:job_listings:update')}
-                   >
-                        <Button asChild variant='outline'>
+                    <AsyncIf condition={() => hasOrgUserPermissions('org:job_listings:update')}>
+                        <Button
+                            asChild
+                            variant='outline'
+                        >
                             <Link href={employerJobListingsEditUrl.replace('[jobListingId]', id)}>
                                 <EditIcon className='size-4' />
                                 Edit
                             </Link>
                         </Button>
-                   </AsyncIf>
+                    </AsyncIf>
+                    <StatusUpdateButton status={status} />
                 </div>
             </div>
 
-            <MarkdownPartial 
-                dialogMarkdown={
-                    <MarkdownRenderer 
-                        source={description}
-                    />
-                }
+            <MarkdownPartial
+                dialogMarkdown={<MarkdownRenderer source={description} />}
                 dialogTitle='Description'
                 mainMarkdown={
-                    <MarkdownRenderer 
+                    <MarkdownRenderer
                         className='prose-sm'
                         source={description}
                     />
                 }
             />
         </div>
+    );
+}
+
+function StatusUpdateButton({ status }: { status: JobListingStatus }): React.JSX.Element {
+    const button = <Button variant='outline'>Toggle</Button>;
+
+    return (
+        <AsyncIf condition={() => hasOrgUserPermissions('org:job_listings:status_change')}>
+            {getNextJobListingStatus(status) === 'published' ? (
+                <AsyncIf
+                    condition={async () => {
+                        const isMaxed = await hasReachedMaxFeaturedJobListings();
+                        return !isMaxed;
+                    }}
+                >
+                    {button}
+                </AsyncIf>
+            ) : (
+                button
+            )}
+        </AsyncIf>
     );
 }

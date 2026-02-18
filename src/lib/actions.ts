@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation';
 import { cacheTag } from 'next/cache';
 import type z from 'zod';
-import { and, desc, eq } from 'drizzle-orm';
+import { and, count, desc, eq } from 'drizzle-orm';
 import { db } from 'drizzle/db';
 import { JobListingTable } from 'drizzle/schema';
 import { insertJobListing, updateJobListing as updateJobListingDb } from 'db/jobListings';
@@ -13,6 +13,7 @@ import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { hasOrgUserPermissions } from 'lib/services/clerk/orgUserPermissions';
 import { jobListingFormZSchema } from 'lib/zSchema';
 import type { BasicError } from 'types';
+import { hasPlanFeature } from 'lib/services/clerk/planFeatures';
 
 export async function getMostRecentJobListingByOrgId(
     orgId: string
@@ -26,6 +27,23 @@ export async function getMostRecentJobListingByOrgId(
         orderBy: desc(JobListingTable.createdAt),
         columns: { id: true },
     });
+}
+
+export async function getPublishedJobListingsCount(orgId: string): Promise<number> {
+    'use cache';
+    cacheTag(getJobListingsOrganizationTag(orgId));
+
+    const [res] = await db
+        .select({ count: count() })
+        .from(JobListingTable)
+        .where(
+            and(
+                eq(JobListingTable.organizationId, orgId), 
+                eq(JobListingTable.status, 'published')
+            )
+        );
+
+    return res.count
 }
 
 export async function getJobListingById(
@@ -78,7 +96,7 @@ export async function updateJobListing(
 ): Promise<BasicError> {
     const { orgId } = await getCurrentOrganization();
 
-    if (!orgId|| !(await hasOrgUserPermissions('org:job_listings:update'))) {
+    if (!orgId || !(await hasOrgUserPermissions('org:job_listings:update'))) {
         return {
             error: true,
             message: 'You do not have permissions to update a job listing',
@@ -94,16 +112,32 @@ export async function updateJobListing(
         };
     }
 
-    const jobListing = await getJobListingById(id, orgId)
+    const jobListing = await getJobListingById(id, orgId);
 
     if (!jobListing) {
         return {
             error: true,
-            message: 'This job listing does not exist. '
-        }
+            message: 'This job listing does not exist. ',
+        };
     }
 
     const updatedJobListing = await updateJobListingDb(id, data);
 
     redirect(`${employerJobListingsUrl}/${updatedJobListing.id}`);
+}
+
+export async function hasReachedMaxFeaturedJobListings(): Promise<boolean> {
+    const { orgId } = await getCurrentOrganization()
+
+    if (!orgId) return true
+
+    const ct = await getPublishedJobListingsCount(orgId)
+
+    const canPost = await Promise.all([
+        hasPlanFeature('post_1_job_listing').then(hasFeature => hasFeature && ct < 1),
+        hasPlanFeature('post_3_job_listings').then(hasFeature => hasFeature && ct < 3),
+        hasPlanFeature('post_15_jog_listings').then(hasFeature => hasFeature && ct < 15),
+    ])
+
+    return !canPost.some(Boolean)
 }
