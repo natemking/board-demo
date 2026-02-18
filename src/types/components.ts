@@ -2,10 +2,9 @@ import type { ComponentProps, ReactNode, Ref } from 'react';
 import type { SignInButton, SignOutButton, SignUpButton } from '@clerk/nextjs';
 import type { MDXEditorMethods, MDXEditorProps } from '@mdxeditor/editor';
 import type { MDXRemoteProps } from 'next-mdx-remote/rsc';
-import type { JobListingTable, OrganizationTable, UserTable } from 'drizzle/schema';
+import type { JobListingStatus, JobListingTable, OrganizationTable, UserTable } from 'drizzle/schema';
 import type { CompositionalComponent } from './index';
 // clerk components
-
 export type ClerkProviderProps = CompositionalComponent;
 export type SignedOutStatusProps = CompositionalComponent;
 export type SignedInStatusProps = CompositionalComponent;
@@ -15,13 +14,22 @@ export type SignOutButtonProps = CompositionalComponent & ComponentProps<typeof 
 
 // components
 export type AppSidebarClientProps = CompositionalComponent;
+
 export type AppSidebarProps = CompositionalComponent & {
     content: ReactNode;
     footerButton: ReactNode;
 };
+
+export type AsyncIfProps =  CompositionalComponent & {
+    condition: () => Promise<boolean>;
+    loadingFallback?: ReactNode;
+    otherwise?: ReactNode;
+};
+
 export type InternalMarkDownEditorProps = MDXEditorProps & {
     editorRef?: Ref<MDXEditorMethods>;
 };
+
 export type JobListingBadgesProps = {
     jobListing: Pick<
         typeof JobListingTable.$inferSelect,
@@ -39,6 +47,11 @@ export type LoadingSwapProps = CompositionalComponent & {
     className?: string;
     isLoading: boolean;
 };
+
+export type JobListingEditButtonProps = {
+    jobListingId: string;
+};
+
 export type JobListingFormProps = {
     jobListing?: Pick<
         typeof JobListingTable.$inferSelect,
@@ -54,14 +67,21 @@ export type JobListingFormProps = {
         | 'wageInterval'
     >;
 };
+
+export type JobListingStatusUpdateButtonProps = {
+    status: JobListingStatus
+};
+
 export type MarkdownPartialProps = {
     dialogMarkdown: ReactNode;
     dialogTitle: string;
     mainMarkdown: ReactNode;
 };
+
 export type MarkdownRendererProps = MDXRemoteProps & {
     className?: string;
 };
+
 export type SidebarNavGroupProps = {
     className?: string;
     items: {
@@ -71,9 +91,11 @@ export type SidebarNavGroupProps = {
         authStatus?: 'signedOut' | 'signedIn';
     }[];
 };
+
 export type SidebarUserButtonClientProps = {
     user: typeof UserTable.$inferSelect;
 };
+
 export type SidebarOrganizationButtonClientProps = {
     user: Pick<typeof UserTable.$inferSelect, 'email'>;
     organization: Pick<typeof OrganizationTable.$inferSelect, 'name'> & { imageUrl: string | null };

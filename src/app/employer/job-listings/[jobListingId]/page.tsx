@@ -1,17 +1,15 @@
 import { Suspense } from 'react';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { EditIcon } from 'lucide-react';
-import { JobListingBadges } from 'components/JobListingBadges';
+import { JobListingBadges } from 'components/job-listing/JobListingBadges';
+import { MarkdownRenderer } from 'components/markdown/MarkdownRenderer';
+import { MarkdownPartial } from 'components/markdown/MarkdownPartial';
 import { Badge } from 'components/shadcn/badge';
-import { Button } from 'components/shadcn/button';
 import { getJobListingById } from 'lib/actions';
-import { employerJobListingsEditUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { formatJobListingsStatus } from 'lib/utils';
 import type { JobListingPageProps } from 'types';
-import { MarkdownPartial } from 'components/markdown/MarkdownPartial';
-import { MarkdownRenderer } from 'components/markdown/MarkdownRenderer';
+import { JobListingStatusUpdateButton } from 'components/job-listing/JobListingStatusUpdateButton';
+import { JobListingEditButton } from 'components/job-listing/JobListingEditButton';
 
 export default function JobListingPage(props: JobListingPageProps): React.JSX.Element {
     return (
@@ -45,24 +43,16 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
                     </div>
                 </div>
                 <div className='flex items-center gap-2 empty:-mt-4'>
-                    <Button asChild variant='outline'>
-                        <Link href={employerJobListingsEditUrl.replace('[jobListingId]', id)}>
-                            <EditIcon className='size-4' />
-                            Edit
-                        </Link>
-                    </Button>
+                    <JobListingEditButton jobListingId={id} />
+                    <JobListingStatusUpdateButton status={status} />
                 </div>
             </div>
 
-            <MarkdownPartial 
-                dialogMarkdown={
-                    <MarkdownRenderer 
-                        source={description}
-                    />
-                }
+            <MarkdownPartial
+                dialogMarkdown={<MarkdownRenderer source={description} />}
                 dialogTitle='Description'
                 mainMarkdown={
-                    <MarkdownRenderer 
+                    <MarkdownRenderer
                         className='prose-sm'
                         source={description}
                     />

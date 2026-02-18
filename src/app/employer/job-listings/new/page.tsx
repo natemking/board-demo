@@ -1,4 +1,4 @@
-import { JobListingForm } from 'components/JobListingForm';
+import { JobListingForm } from 'components/job-listing/JobListingForm';
 import { Card, CardContent } from 'components/shadcn/card';
 
 export default function NewJobListingPage(): React.JSX.Element {
@@ -11,7 +11,7 @@ export default function NewJobListingPage(): React.JSX.Element {
 
             <Card>
                 <CardContent>
-                   <JobListingForm />
+                    <JobListingForm />
                 </CardContent>
             </Card>
         </div>
