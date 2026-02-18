@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import { JobListingForm } from 'components/JobListingForm';
+import { JobListingForm } from 'components/job-listing/JobListingForm';
 import { Card, CardContent } from 'components/shadcn/card';
 import type { JobListingPageProps } from 'types';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
@@ -33,5 +33,5 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
 
     if (!jobListing) return notFound();
 
-    return <JobListingForm jobListing={jobListing}/>;
+    return <JobListingForm jobListing={jobListing} />;
 }
