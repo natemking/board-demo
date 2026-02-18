@@ -23,4 +23,11 @@ export type UserPermission =
     | 'org:job_listings:status_change'
     | 'org:job_listings:update'
     | 'org:job_listing_applications:change_rating'
-    | 'org:job_listing_applications:change_stage'
+    | 'org:job_listing_applications:change_stage';
+
+export type PlanFeature =
+    | '1_featured_job_listing'
+    | 'post_1_job_listing'
+    | 'post_3_job_listings'
+    | 'post_15_jog_listings'
+    | 'unlimited_featured_jobs_listings'
