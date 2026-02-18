@@ -10,6 +10,7 @@ import { insertJobListing, updateJobListing as updateJobListingDb } from 'db/job
 import { getJobListingsIdTag, getJobListingsOrganizationTag } from 'db/cache/jobListings';
 import { employerJobListingsUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
+import { hasOrgUserPermissions } from 'lib/services/clerk/orgUserPermissions';
 import { jobListingFormZSchema } from 'lib/zSchema';
 import type { BasicError } from 'types';
 
@@ -45,7 +46,7 @@ export async function createJobListing(
 ): Promise<BasicError> {
     const { orgId } = await getCurrentOrganization();
 
-    if (!orgId) {
+    if (!orgId || !(await hasOrgUserPermissions('org:job_listings:create'))) {
         return {
             error: true,
             message: 'You do not have permissions to create a job listing',
@@ -77,10 +78,10 @@ export async function updateJobListing(
 ): Promise<BasicError> {
     const { orgId } = await getCurrentOrganization();
 
-    if (!orgId) {
+    if (!orgId|| !(await hasOrgUserPermissions('org:job_listings:update'))) {
         return {
             error: true,
-            message: 'You do not have permissions to edit a job listing',
+            message: 'You do not have permissions to update a job listing',
         };
     }
 
@@ -89,11 +90,20 @@ export async function updateJobListing(
     if (!success) {
         return {
             error: true,
-            message: 'There was an error editing the job listing',
+            message: 'There was an error updating the job listing',
         };
     }
 
-    const updatedJobListing = await updateJobListingDb(id,data);
+    const jobListing = await getJobListingById(id, orgId)
+
+    if (!jobListing) {
+        return {
+            error: true,
+            message: 'This job listing does not exist. '
+        }
+    }
+
+    const updatedJobListing = await updateJobListingDb(id, data);
 
     redirect(`${employerJobListingsUrl}/${updatedJobListing.id}`);
 }
