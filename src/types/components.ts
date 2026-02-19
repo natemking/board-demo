@@ -65,6 +65,11 @@ export type JobListingEditButtonProps = {
     jobListingId: string;
 };
 
+export type JobListingFeatureToggleButtonProps = {
+    isFeatured: boolean;
+    jobListingId: string;
+};
+
 export type JobListingFormProps = {
     jobListing?: Pick<
         typeof JobListingTable.$inferSelect,
@@ -113,4 +118,9 @@ export type SidebarUserButtonClientProps = {
 export type SidebarOrganizationButtonClientProps = {
     user: Pick<typeof UserTable.$inferSelect, 'email'>;
     organization: Pick<typeof OrganizationTable.$inferSelect, 'name'> & { imageUrl: string | null };
+};
+
+export type UpgradePopoverProps = {
+    buttonText: ReactNode;
+    popoverText: ReactNode;
 };

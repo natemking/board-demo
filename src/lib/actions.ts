@@ -44,6 +44,20 @@ export async function getPublishedJobListingsCount(orgId: string): Promise<numbe
     return res.count;
 }
 
+export async function getFeaturedJobListingsCount(orgId: string): Promise<number> {
+    'use cache';
+    cacheTag(getJobListingsOrganizationTag(orgId));
+
+    const [res] = await db
+        .select({ count: count() })
+        .from(JobListingTable)
+        .where(
+            and(eq(JobListingTable.organizationId, orgId), eq(JobListingTable.isFeatured, true))
+        );
+
+    return res.count;
+}
+
 export async function getJobListingById(
     jobListingId: string,
     orgId: string
@@ -140,6 +154,21 @@ export async function hasReachedMaxPublishedJobListings(): Promise<boolean> {
     return !canPost.some(Boolean);
 }
 
+export async function hasReachedMaxFeaturedJobListings(): Promise<boolean> {
+    const { orgId } = await getCurrentOrganization();
+
+    if (!orgId) return true;
+
+    const ct = await getFeaturedJobListingsCount(orgId);
+
+    const canFeature = await Promise.all([
+        hasPlanFeature('1_featured_job_listing').then(hasFeature => hasFeature && ct < 1),
+        hasPlanFeature('unlimited_featured_jobs_listings'),
+    ]);
+
+    return !canFeature.some(Boolean);
+}
+
 export async function toggleJobListingStatus(id: string): Promise<BasicError> {
     const { orgId } = await getCurrentOrganization();
 
@@ -170,6 +199,41 @@ export async function toggleJobListingStatus(id: string): Promise<BasicError> {
         isFeatured: newStatus === 'published' ? undefined : false,
         postedAt:
             newStatus === 'published' && jobListing.postedAt === null ? new Date() : undefined,
+    });
+
+    return {
+        error: false
+    }
+}
+
+
+export async function toggleJobListingFeatured(id: string): Promise<BasicError> {
+    const { orgId } = await getCurrentOrganization();
+
+    const error = {
+        error: true,
+        message: 'You do not have permissions to update this job listing\'s featured status',
+    };
+
+    if (!orgId) return error;
+
+    const jobListing = await getJobListingById(id, orgId);
+
+    if (!jobListing) return error;
+
+    const { isFeatured } = jobListing;
+
+    const newFeaturedStatus= !isFeatured;
+
+    if (
+        !(await hasOrgUserPermissions('org:job_listings:status_change')) ||
+        (newFeaturedStatus && (await hasReachedMaxFeaturedJobListings()))
+    ) {
+        return error;
+    }
+
+    await updateJobListingDb(id, {
+        isFeatured: newFeaturedStatus,
     });
 
     return {

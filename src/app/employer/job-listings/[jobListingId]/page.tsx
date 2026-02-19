@@ -10,6 +10,7 @@ import { formatJobListingsStatus } from 'lib/utils';
 import type { JobListingPageProps } from 'types';
 import { JobListingStatusUpdateButton } from 'components/job-listing/JobListingStatusUpdateButton';
 import { JobListingEditButton } from 'components/job-listing/JobListingEditButton';
+import { JobListingFeaturedToggleButton } from 'components/job-listing/JobListingFeaturedToggleButton';
 
 export default function JobListingPage(props: JobListingPageProps): React.JSX.Element {
     return (
@@ -30,7 +31,7 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
 
     if (!jobListing) return notFound();
 
-    const { id, description, status, title } = jobListing;
+    const { id, description, isFeatured, status, title } = jobListing;
 
     return (
         <div className='@container mx-auto max-w-6xl space-y-6 p-4'>
@@ -48,6 +49,12 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
                         jobListingId={id}
                         status={status}
                     />
+                    {status === 'published' ? (
+                        <JobListingFeaturedToggleButton
+                            isFeatured={isFeatured}
+                            jobListingId={id}
+                        />
+                    ) : null}
                 </div>
             </div>
 
