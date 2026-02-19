@@ -1,4 +1,4 @@
-
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { AsyncIf } from 'components/AsyncIf';
@@ -33,7 +33,31 @@ export function statusToggleButtonText(status: JobListingStatus): React.JSX.Elem
     }
 }
 
-export function JobListingStatusUpdateButton({ status }: JobListingStatusUpdateButtonProps): React.JSX.Element {
+function UpgradePopover({
+    buttonText,
+    popoverText,
+}: {
+    buttonText: ReactNode;
+    popoverText: ReactNode;
+}): React.JSX.Element {
+    return (
+        <Popover>
+            <PopoverTrigger asChild>
+                <Button>{buttonText}</Button>
+            </PopoverTrigger>
+            <PopoverContent className='flex flex-col gap-2'>
+                {popoverText}
+                <Button asChild>
+                    <Link href={employerPricingUrl}>Upgrade</Link>
+                </Button>
+            </PopoverContent>
+        </Popover>
+    );
+}
+
+export function JobListingStatusUpdateButton({
+    status,
+}: JobListingStatusUpdateButtonProps): React.JSX.Element {
     const button = <Button variant='outline'>Toggle</Button>;
 
     return (
@@ -45,19 +69,10 @@ export function JobListingStatusUpdateButton({ status }: JobListingStatusUpdateB
                         return !isMaxed;
                     }}
                     otherwise={
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button>{statusToggleButtonText(status)}</Button>
-                            </PopoverTrigger>
-                            <PopoverContent className='flex flex-col gap-2'>
-                                You must upgrade your plan to publish more job listings.
-                                <Button asChild>
-                                    <Link href={employerPricingUrl}>
-                                        Upgrade
-                                    </Link>
-                                </Button>
-                            </PopoverContent>
-                        </Popover>
+                        <UpgradePopover
+                            buttonText={statusToggleButtonText(status)}
+                            popoverText='You must upgrade your plan to publish more job listings.'
+                        />
                     }
                 >
                     {button}
@@ -68,5 +83,3 @@ export function JobListingStatusUpdateButton({ status }: JobListingStatusUpdateB
         </AsyncIf>
     );
 }
-
-
