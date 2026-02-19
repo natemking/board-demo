@@ -29,6 +29,7 @@ export function JobListingDeleteButton({
                 action={deleteJobListing.bind(null, jobListingId)}
                 areYouSureDescription='Are your sure you want to delete this job?'
                 requireAreYouSure
+                variant='destructive'
             >
                 <Trash2Icon className='size-4' />
                 Delete
