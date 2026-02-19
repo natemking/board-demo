@@ -11,9 +11,10 @@ import { getJobListingsIdTag, getJobListingsOrganizationTag } from 'db/cache/job
 import { employerJobListingsUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { hasOrgUserPermissions } from 'lib/services/clerk/orgUserPermissions';
+import { hasPlanFeature } from 'lib/services/clerk/planFeatures';
+import { getNextJobListingStatus } from 'lib/utils';
 import { jobListingFormZSchema } from 'lib/zSchema';
 import type { BasicError } from 'types';
-import { hasPlanFeature } from 'lib/services/clerk/planFeatures';
 
 export async function getMostRecentJobListingByOrgId(
     orgId: string
@@ -37,13 +38,10 @@ export async function getPublishedJobListingsCount(orgId: string): Promise<numbe
         .select({ count: count() })
         .from(JobListingTable)
         .where(
-            and(
-                eq(JobListingTable.organizationId, orgId), 
-                eq(JobListingTable.status, 'published')
-            )
+            and(eq(JobListingTable.organizationId, orgId), eq(JobListingTable.status, 'published'))
         );
 
-    return res.count
+    return res.count;
 }
 
 export async function getJobListingById(
@@ -126,18 +124,55 @@ export async function updateJobListing(
     redirect(`${employerJobListingsUrl}/${updatedJobListing.id}`);
 }
 
-export async function hasReachedMaxFeaturedJobListings(): Promise<boolean> {
-    const { orgId } = await getCurrentOrganization()
+export async function hasReachedMaxPublishedJobListings(): Promise<boolean> {
+    const { orgId } = await getCurrentOrganization();
 
-    if (!orgId) return true
+    if (!orgId) return true;
 
-    const ct = await getPublishedJobListingsCount(orgId)
+    const ct = await getPublishedJobListingsCount(orgId);
 
     const canPost = await Promise.all([
         hasPlanFeature('post_1_job_listing').then(hasFeature => hasFeature && ct < 1),
         hasPlanFeature('post_3_job_listings').then(hasFeature => hasFeature && ct < 3),
         hasPlanFeature('post_15_jog_listings').then(hasFeature => hasFeature && ct < 15),
-    ])
+    ]);
 
-    return !canPost.some(Boolean)
+    return !canPost.some(Boolean);
+}
+
+export async function toggleJobListingStatus(id: string): Promise<BasicError> {
+    const { orgId } = await getCurrentOrganization();
+
+    const error = {
+        error: true,
+        message: 'You do not have permissions to update this job listing status',
+    };
+
+    if (!orgId) return error;
+
+    const jobListing = await getJobListingById(id, orgId);
+
+    if (!jobListing) return error;
+
+    const { status } = jobListing;
+
+    const newStatus = getNextJobListingStatus(status);
+
+    if (
+        !(await hasOrgUserPermissions('org:job_listings:status_change')) ||
+        (newStatus === 'published' && (await hasReachedMaxPublishedJobListings()))
+    ) {
+        return error;
+    }
+
+    await updateJobListingDb(id, {
+        status: newStatus,
+        isFeatured: newStatus === 'published' ? undefined : false,
+        postedAt:
+            newStatus === 'published' && jobListing.postedAt === null ? new Date() : undefined,
+    });
+
+    return {
+        error: false
+    }
 }

@@ -2,7 +2,12 @@ import type { ComponentProps, ComponentPropsWithRef, ReactNode, Ref } from 'reac
 import type { SignInButton, SignOutButton, SignUpButton } from '@clerk/nextjs';
 import type { MDXEditorMethods, MDXEditorProps } from '@mdxeditor/editor';
 import type { MDXRemoteProps } from 'next-mdx-remote/rsc';
-import type { JobListingStatus, JobListingTable, OrganizationTable, UserTable } from 'drizzle/schema';
+import type {
+    JobListingStatus,
+    JobListingTable,
+    OrganizationTable,
+    UserTable,
+} from 'drizzle/schema';
 import type { Button } from 'components/shadcn/button';
 import type { BasicError, CompositionalComponent } from './index';
 
@@ -28,7 +33,7 @@ export type AppSidebarProps = CompositionalComponent & {
     footerButton: ReactNode;
 };
 
-export type AsyncIfProps =  CompositionalComponent & {
+export type AsyncIfProps = CompositionalComponent & {
     condition: () => Promise<boolean>;
     loadingFallback?: ReactNode;
     otherwise?: ReactNode;
@@ -77,7 +82,8 @@ export type JobListingFormProps = {
 };
 
 export type JobListingStatusUpdateButtonProps = {
-    status: JobListingStatus
+    jobListingId: string;
+    status: JobListingStatus;
 };
 
 export type MarkdownPartialProps = {

@@ -44,7 +44,10 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
                 </div>
                 <div className='flex items-center gap-2 empty:-mt-4'>
                     <JobListingEditButton jobListingId={id} />
-                    <JobListingStatusUpdateButton status={status} />
+                    <JobListingStatusUpdateButton
+                        jobListingId={id}
+                        status={status}
+                    />
                 </div>
             </div>
 

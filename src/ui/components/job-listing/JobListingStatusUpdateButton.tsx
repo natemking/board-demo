@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { ActionButton } from 'components/ActionButton';
 import { AsyncIf } from 'components/AsyncIf';
 import { Button } from 'components/shadcn/button';
 import { PopoverTrigger, PopoverContent, Popover } from 'components/shadcn/popover';
-import { hasReachedMaxFeaturedJobListings } from 'lib/actions';
+import { hasReachedMaxPublishedJobListings, toggleJobListingStatus } from 'lib/actions';
 import { employerPricingUrl } from 'lib/constants';
 import { hasOrgUserPermissions } from 'lib/services/clerk/orgUserPermissions';
 import { getNextJobListingStatus } from 'lib/utils';
@@ -56,16 +57,26 @@ function UpgradePopover({
 }
 
 export function JobListingStatusUpdateButton({
+    jobListingId,
     status,
 }: JobListingStatusUpdateButtonProps): React.JSX.Element {
-    const button = <Button variant='outline'>Toggle</Button>;
+    const button = (
+        <ActionButton
+            action={toggleJobListingStatus.bind(null, jobListingId)}
+            areYouSureDescription='This will immediately show job listing to all users.'
+            requireAreYouSure={getNextJobListingStatus(status) === 'published'}
+            variant='outline'
+        >
+            {statusToggleButtonText(status)}
+        </ActionButton>
+    );
 
     return (
         <AsyncIf condition={() => hasOrgUserPermissions('org:job_listings:status_change')}>
             {getNextJobListingStatus(status) === 'published' ? (
                 <AsyncIf
                     condition={async () => {
-                        const isMaxed = await hasReachedMaxFeaturedJobListings();
+                        const isMaxed = await hasReachedMaxPublishedJobListings();
                         return !isMaxed;
                     }}
                     otherwise={
