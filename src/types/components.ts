@@ -1,9 +1,11 @@
-import type { ComponentProps, ReactNode, Ref } from 'react';
+import type { ComponentProps, ComponentPropsWithRef, ReactNode, Ref } from 'react';
 import type { SignInButton, SignOutButton, SignUpButton } from '@clerk/nextjs';
 import type { MDXEditorMethods, MDXEditorProps } from '@mdxeditor/editor';
 import type { MDXRemoteProps } from 'next-mdx-remote/rsc';
 import type { JobListingStatus, JobListingTable, OrganizationTable, UserTable } from 'drizzle/schema';
-import type { CompositionalComponent } from './index';
+import type { Button } from 'components/shadcn/button';
+import type { BasicError, CompositionalComponent } from './index';
+
 // clerk components
 export type ClerkProviderProps = CompositionalComponent;
 export type SignedOutStatusProps = CompositionalComponent;
@@ -13,6 +15,12 @@ export type SignInButtonProps = CompositionalComponent & ComponentProps<typeof S
 export type SignOutButtonProps = CompositionalComponent & ComponentProps<typeof SignOutButton>;
 
 // components
+export type ActionButtonProps = Omit<ComponentPropsWithRef<typeof Button>, 'onClick'> & {
+    action: () => Promise<BasicError>;
+    requireAreYouSure?: boolean;
+    areYouSureDescription?: string;
+};
+
 export type AppSidebarClientProps = CompositionalComponent;
 
 export type AppSidebarProps = CompositionalComponent & {
