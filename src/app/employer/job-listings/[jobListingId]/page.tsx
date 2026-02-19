@@ -1,15 +1,19 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
+import {
+    JobListingDeleteButton,
+    JobListingEditButton,
+    JobListingFeaturedToggleButton,
+    JobListingStatusUpdateButton,
+} from 'components/job-listing/JobListingButtons';
 import { JobListingBadges } from 'components/job-listing/JobListingBadges';
 import { MarkdownRenderer } from 'components/markdown/MarkdownRenderer';
 import { MarkdownPartial } from 'components/markdown/MarkdownPartial';
 import { Badge } from 'components/shadcn/badge';
-import { getJobListingById } from 'lib/actions';
+import { getJobListingById } from 'lib/actions/jobListing';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { formatJobListingsStatus } from 'lib/utils';
 import type { JobListingPageProps } from 'types';
-import { JobListingStatusUpdateButton } from 'components/job-listing/JobListingStatusUpdateButton';
-import { JobListingEditButton } from 'components/job-listing/JobListingEditButton';
 
 export default function JobListingPage(props: JobListingPageProps): React.JSX.Element {
     return (
@@ -30,7 +34,7 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
 
     if (!jobListing) return notFound();
 
-    const { id, description, status, title } = jobListing;
+    const { id, description, isFeatured, status, title } = jobListing;
 
     return (
         <div className='@container mx-auto max-w-6xl space-y-6 p-4'>
@@ -44,7 +48,17 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
                 </div>
                 <div className='flex items-center gap-2 empty:-mt-4'>
                     <JobListingEditButton jobListingId={id} />
-                    <JobListingStatusUpdateButton status={status} />
+                    <JobListingStatusUpdateButton
+                        jobListingId={id}
+                        status={status}
+                    />
+                    {status === 'published' ? (
+                        <JobListingFeaturedToggleButton
+                            isFeatured={isFeatured}
+                            jobListingId={id}
+                        />
+                    ) : null}
+                    <JobListingDeleteButton jobListingId={id} />
                 </div>
             </div>
 

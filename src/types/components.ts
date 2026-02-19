@@ -1,9 +1,16 @@
-import type { ComponentProps, ReactNode, Ref } from 'react';
+import type { ComponentProps, ComponentPropsWithRef, ReactNode, Ref } from 'react';
 import type { SignInButton, SignOutButton, SignUpButton } from '@clerk/nextjs';
 import type { MDXEditorMethods, MDXEditorProps } from '@mdxeditor/editor';
 import type { MDXRemoteProps } from 'next-mdx-remote/rsc';
-import type { JobListingStatus, JobListingTable, OrganizationTable, UserTable } from 'drizzle/schema';
-import type { CompositionalComponent } from './index';
+import type {
+    JobListingStatus,
+    JobListingTable,
+    OrganizationTable,
+    UserTable,
+} from 'drizzle/schema';
+import type { Button } from 'components/shadcn/button';
+import type { BasicError, CompositionalComponent } from './index';
+
 // clerk components
 export type ClerkProviderProps = CompositionalComponent;
 export type SignedOutStatusProps = CompositionalComponent;
@@ -13,6 +20,12 @@ export type SignInButtonProps = CompositionalComponent & ComponentProps<typeof S
 export type SignOutButtonProps = CompositionalComponent & ComponentProps<typeof SignOutButton>;
 
 // components
+export type ActionButtonProps = Omit<ComponentPropsWithRef<typeof Button>, 'onClick'> & {
+    action: () => Promise<BasicError>;
+    requireAreYouSure?: boolean;
+    areYouSureDescription?: string;
+};
+
 export type AppSidebarClientProps = CompositionalComponent;
 
 export type AppSidebarProps = CompositionalComponent & {
@@ -20,7 +33,7 @@ export type AppSidebarProps = CompositionalComponent & {
     footerButton: ReactNode;
 };
 
-export type AsyncIfProps =  CompositionalComponent & {
+export type AsyncIfProps = CompositionalComponent & {
     condition: () => Promise<boolean>;
     loadingFallback?: ReactNode;
     otherwise?: ReactNode;
@@ -48,8 +61,12 @@ export type LoadingSwapProps = CompositionalComponent & {
     isLoading: boolean;
 };
 
-export type JobListingEditButtonProps = {
+export type JobListingBaseButtonProps = {
     jobListingId: string;
+};
+
+export type JobListingFeatureToggleButtonProps = JobListingBaseButtonProps & {
+    isFeatured: boolean;
 };
 
 export type JobListingFormProps = {
@@ -68,8 +85,8 @@ export type JobListingFormProps = {
     >;
 };
 
-export type JobListingStatusUpdateButtonProps = {
-    status: JobListingStatus
+export type JobListingStatusUpdateButtonProps = JobListingBaseButtonProps & {
+    status: JobListingStatus;
 };
 
 export type MarkdownPartialProps = {
@@ -99,4 +116,9 @@ export type SidebarUserButtonClientProps = {
 export type SidebarOrganizationButtonClientProps = {
     user: Pick<typeof UserTable.$inferSelect, 'email'>;
     organization: Pick<typeof OrganizationTable.$inferSelect, 'name'> & { imageUrl: string | null };
+};
+
+export type UpgradePopoverProps = {
+    buttonText: ReactNode;
+    popoverText: ReactNode;
 };
