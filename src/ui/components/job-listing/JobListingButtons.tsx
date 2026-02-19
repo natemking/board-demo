@@ -10,7 +10,7 @@ import {
     hasReachedMaxPublishedJobListings,
     toggleJobListingFeatured,
     toggleJobListingStatus,
-} from 'lib/actions';
+} from 'lib/actions/jobListing';
 import { employerJobListingsEditUrl } from 'lib/constants';
 import { hasOrgUserPermissions } from 'lib/services/clerk/orgUserPermissions';
 import type {

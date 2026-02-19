@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { employerJobListingsUrl, employerJobListingsNewUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
-import { getMostRecentJobListingByOrgId } from 'lib/actions';
+import { getMostRecentJobListingByOrgId } from 'lib/actions/jobListing';
 
 export default function EmployerHomePage(): React.JSX.Element {
     return (
