@@ -6,9 +6,13 @@ import type z from 'zod';
 import { and, count, desc, eq } from 'drizzle-orm';
 import { db } from 'drizzle/db';
 import { JobListingTable } from 'drizzle/schema';
-import { insertJobListing, updateJobListing as updateJobListingDb } from 'db/jobListings';
+import {
+    insertJobListing,
+    deleteJobListing as deleteJobListingDb,
+    updateJobListing as updateJobListingDb,
+} from 'db/jobListings';
 import { getJobListingsIdTag, getJobListingsOrganizationTag } from 'db/cache/jobListings';
-import { employerJobListingsUrl } from 'lib/constants';
+import { employerJobListingsUrl, employerUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { hasOrgUserPermissions } from 'lib/services/clerk/orgUserPermissions';
 import { hasPlanFeature } from 'lib/services/clerk/planFeatures';
@@ -138,6 +142,27 @@ export async function updateJobListing(
     redirect(`${employerJobListingsUrl}/${updatedJobListing.id}`);
 }
 
+export async function deleteJobListing(id: string): Promise<BasicError> {
+    const { orgId } = await getCurrentOrganization();
+
+    const error = {
+        error: true,
+        message: 'You do not have permissions to delete this job listing',
+    };
+
+    if (!orgId) return error;
+
+    const jobListing = await getJobListingById(id, orgId);
+
+    if (!jobListing) return error;
+
+    if (!(await hasOrgUserPermissions('org:job_listings:delete'))) return error;
+
+    await deleteJobListingDb(jobListing.id)
+
+    redirect(employerUrl)
+}
+
 export async function hasReachedMaxPublishedJobListings(): Promise<boolean> {
     const { orgId } = await getCurrentOrganization();
 
@@ -202,10 +227,9 @@ export async function toggleJobListingStatus(id: string): Promise<BasicError> {
     });
 
     return {
-        error: false
-    }
+        error: false,
+    };
 }
-
 
 export async function toggleJobListingFeatured(id: string): Promise<BasicError> {
     const { orgId } = await getCurrentOrganization();
@@ -223,7 +247,7 @@ export async function toggleJobListingFeatured(id: string): Promise<BasicError> 
 
     const { isFeatured } = jobListing;
 
-    const newFeaturedStatus= !isFeatured;
+    const newFeaturedStatus = !isFeatured;
 
     if (
         !(await hasOrgUserPermissions('org:job_listings:status_change')) ||
@@ -237,6 +261,6 @@ export async function toggleJobListingFeatured(id: string): Promise<BasicError> 
     });
 
     return {
-        error: false
-    }
+        error: false,
+    };
 }

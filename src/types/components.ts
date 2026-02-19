@@ -61,6 +61,10 @@ export type LoadingSwapProps = CompositionalComponent & {
     isLoading: boolean;
 };
 
+export type JobListingDeleteButtonProps = {
+    jobListingId: string;
+};
+
 export type JobListingEditButtonProps = {
     jobListingId: string;
 };

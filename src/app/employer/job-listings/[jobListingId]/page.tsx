@@ -11,6 +11,7 @@ import type { JobListingPageProps } from 'types';
 import { JobListingStatusUpdateButton } from 'components/job-listing/JobListingStatusUpdateButton';
 import { JobListingEditButton } from 'components/job-listing/JobListingEditButton';
 import { JobListingFeaturedToggleButton } from 'components/job-listing/JobListingFeaturedToggleButton';
+import { JobListingDeleteButton } from 'components/job-listing/JobListingDeleteButton';
 
 export default function JobListingPage(props: JobListingPageProps): React.JSX.Element {
     return (
@@ -55,6 +56,7 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
                             jobListingId={id}
                         />
                     ) : null}
+                    <JobListingDeleteButton jobListingId={id} />
                 </div>
             </div>
 
