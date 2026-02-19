@@ -61,17 +61,12 @@ export type LoadingSwapProps = CompositionalComponent & {
     isLoading: boolean;
 };
 
-export type JobListingDeleteButtonProps = {
+export type JobListingBaseButtonProps = {
     jobListingId: string;
 };
 
-export type JobListingEditButtonProps = {
-    jobListingId: string;
-};
-
-export type JobListingFeatureToggleButtonProps = {
+export type JobListingFeatureToggleButtonProps = JobListingBaseButtonProps & {
     isFeatured: boolean;
-    jobListingId: string;
 };
 
 export type JobListingFormProps = {
@@ -90,8 +85,7 @@ export type JobListingFormProps = {
     >;
 };
 
-export type JobListingStatusUpdateButtonProps = {
-    jobListingId: string;
+export type JobListingStatusUpdateButtonProps = JobListingBaseButtonProps & {
     status: JobListingStatus;
 };
 

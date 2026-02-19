@@ -1,5 +1,11 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
+import {
+    JobListingDeleteButton,
+    JobListingEditButton,
+    JobListingFeaturedToggleButton,
+    JobListingStatusUpdateButton,
+} from 'components/job-listing/JobListingButtons';
 import { JobListingBadges } from 'components/job-listing/JobListingBadges';
 import { MarkdownRenderer } from 'components/markdown/MarkdownRenderer';
 import { MarkdownPartial } from 'components/markdown/MarkdownPartial';
@@ -8,10 +14,6 @@ import { getJobListingById } from 'lib/actions';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { formatJobListingsStatus } from 'lib/utils';
 import type { JobListingPageProps } from 'types';
-import { JobListingStatusUpdateButton } from 'components/job-listing/JobListingStatusUpdateButton';
-import { JobListingEditButton } from 'components/job-listing/JobListingEditButton';
-import { JobListingFeaturedToggleButton } from 'components/job-listing/JobListingFeaturedToggleButton';
-import { JobListingDeleteButton } from 'components/job-listing/JobListingDeleteButton';
 
 export default function JobListingPage(props: JobListingPageProps): React.JSX.Element {
     return (
