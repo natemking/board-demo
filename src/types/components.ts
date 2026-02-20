@@ -10,7 +10,7 @@ import type {
 } from 'drizzle/schema';
 import type { Button } from 'components/shadcn/button';
 import type { GetJobListingsReturnType } from 'lib/actions/jobListing';
-import type { BasicError, CompositionalComponent } from './index';
+import type { BasicError, CompositionalComponent, HomePageProps } from './index';
 
 // clerk components
 export type ClerkProviderProps = CompositionalComponent;
@@ -81,6 +81,8 @@ export type JobListingFormProps = {
         | 'wageInterval'
     >;
 };
+
+export type JobListingItemsProps = HomePageProps;
 
 export type JobListingMenuProps = {
     orgId: string;

@@ -4,3 +4,6 @@ export type OrganizationsSelectPageProps = {
 export type JobListingPageProps = {
     params: Promise<{ jobListingId: string }>;
 };
+export type HomePageProps = {
+    searchParams: Promise<Record<string, string | string[]>>
+};
