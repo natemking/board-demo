@@ -9,6 +9,7 @@ import type {
     UserTable,
 } from 'drizzle/schema';
 import type { Button } from 'components/shadcn/button';
+import type { GetJobListingsReturnType } from 'lib/actions/jobListing';
 import type { BasicError, CompositionalComponent } from './index';
 
 // clerk components
@@ -83,6 +84,11 @@ export type JobListingFormProps = {
 
 export type JobListingMenuProps = {
     orgId: string;
+};
+
+export type JobListingMenuGroupProps = {
+    status: JobListingStatus
+    jobListings: GetJobListingsReturnType[];
 };
 
 export type JobListingStatusUpdateButtonProps = JobListingBaseButtonProps & {

@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ClipboardList, PlusIcon } from 'lucide-react';
 import { AsyncIf } from 'components/AsyncIf';
+import { JobListingMenu } from 'components/job-listing/JobListingMenu';
 import {
     SidebarGroup,
     SidebarGroupAction,
@@ -16,7 +17,6 @@ import { SidebarOrganizationButton } from 'components/sidebar/SidebarOrganizatio
 import { employerJobListingsNewUrl, organizationsSelectUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { hasOrgUserPermissions } from 'lib/services/clerk/orgUserPermissions';
-import { JobListingMenu } from 'components/job-listing/JobListingMenu';
 
 export default function EmployerLayout({ children }: { children: ReactNode }): React.JSX.Element {
     return (

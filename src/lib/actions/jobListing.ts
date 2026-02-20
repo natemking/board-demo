@@ -21,11 +21,14 @@ import { getNextJobListingStatus } from 'lib/utils';
 import { jobListingFormZSchema } from 'lib/zSchema';
 import type { BasicError } from 'types';
 
-export async function getJobListings(orgId: string): Promise<
-    (Pick<typeof JobListingTable.$inferSelect, 'id' | 'title' | 'status'> & {
-        applicationCount: number;
-    })[]
-> {
+export type GetJobListingsReturnType = Pick<
+    typeof JobListingTable.$inferSelect,
+    'id' | 'title' | 'status'
+> & {
+    applicationCount: number;
+};
+
+export async function getJobListings(orgId: string): Promise<GetJobListingsReturnType[]> {
     'use cache';
 
     cacheTag(getJobListingsOrganizationTag(orgId));
