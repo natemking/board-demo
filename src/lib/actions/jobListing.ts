@@ -5,13 +5,14 @@ import { cacheTag } from 'next/cache';
 import type z from 'zod';
 import { and, count, desc, eq } from 'drizzle-orm';
 import { db } from 'drizzle/db';
-import { JobListingTable } from 'drizzle/schema';
+import { JobListingApplicationTable, JobListingTable } from 'drizzle/schema';
 import {
     insertJobListing,
     deleteJobListing as deleteJobListingDb,
     updateJobListing as updateJobListingDb,
 } from 'db/jobListings';
 import { getJobListingsIdTag, getJobListingsOrganizationTag } from 'db/cache/jobListings';
+import { getJobListingApplicationJobListingTag } from 'db/cache/jobListingApplications';
 import { employerJobListingsUrl, employerUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { hasOrgUserPermissions } from 'lib/services/clerk/orgUserPermissions';
@@ -19,6 +20,41 @@ import { hasPlanFeature } from 'lib/services/clerk/planFeatures';
 import { getNextJobListingStatus } from 'lib/utils';
 import { jobListingFormZSchema } from 'lib/zSchema';
 import type { BasicError } from 'types';
+
+export type GetJobListingsReturnType = Pick<
+    typeof JobListingTable.$inferSelect,
+    'id' | 'title' | 'status'
+> & {
+    applicationCount: number;
+};
+
+export async function getJobListings(orgId: string): Promise<GetJobListingsReturnType[]> {
+    'use cache';
+
+    cacheTag(getJobListingsOrganizationTag(orgId));
+
+    const data = await db
+        .select({
+            id: JobListingTable.id,
+            title: JobListingTable.title,
+            status: JobListingTable.status,
+            applicationCount: count(JobListingApplicationTable.userId),
+        })
+        .from(JobListingTable)
+        .where(eq(JobListingTable.organizationId, orgId))
+        .leftJoin(
+            JobListingApplicationTable,
+            eq(JobListingTable.id, JobListingApplicationTable.jobListingId)
+        )
+        .groupBy(JobListingApplicationTable.jobListingId, JobListingTable.id)
+        .orderBy(desc(JobListingTable.createdAt));
+
+    for (const jobListing of data) {
+        cacheTag(getJobListingApplicationJobListingTag(jobListing.id));
+    }
+
+    return data;
+}
 
 export async function getMostRecentJobListingByOrgId(
     orgId: string
@@ -62,7 +98,7 @@ export async function getFeaturedJobListingsCount(orgId: string): Promise<number
     return res.count;
 }
 
-export async function getJobListingById(
+export async function getJobListingByJobListingId(
     jobListingId: string,
     orgId: string
 ): Promise<typeof JobListingTable.$inferSelect | undefined> {
@@ -128,7 +164,7 @@ export async function updateJobListing(
         };
     }
 
-    const jobListing = await getJobListingById(id, orgId);
+    const jobListing = await getJobListingByJobListingId(id, orgId);
 
     if (!jobListing) {
         return {
@@ -152,15 +188,15 @@ export async function deleteJobListing(id: string): Promise<BasicError> {
 
     if (!orgId) return error;
 
-    const jobListing = await getJobListingById(id, orgId);
+    const jobListing = await getJobListingByJobListingId(id, orgId);
 
     if (!jobListing) return error;
 
     if (!(await hasOrgUserPermissions('org:job_listings:delete'))) return error;
 
-    await deleteJobListingDb(jobListing.id)
+    await deleteJobListingDb(jobListing.id);
 
-    redirect(employerUrl)
+    redirect(employerUrl);
 }
 
 export async function hasReachedMaxPublishedJobListings(): Promise<boolean> {
@@ -204,7 +240,7 @@ export async function toggleJobListingStatus(id: string): Promise<BasicError> {
 
     if (!orgId) return error;
 
-    const jobListing = await getJobListingById(id, orgId);
+    const jobListing = await getJobListingByJobListingId(id, orgId);
 
     if (!jobListing) return error;
 
@@ -236,12 +272,12 @@ export async function toggleJobListingFeatured(id: string): Promise<BasicError> 
 
     const error = {
         error: true,
-        message: 'You do not have permissions to update this job listing\'s featured status',
+        message: "You do not have permissions to update this job listing's featured status",
     };
 
     if (!orgId) return error;
 
-    const jobListing = await getJobListingById(id, orgId);
+    const jobListing = await getJobListingByJobListingId(id, orgId);
 
     if (!jobListing) return error;
 

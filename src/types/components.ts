@@ -9,6 +9,7 @@ import type {
     UserTable,
 } from 'drizzle/schema';
 import type { Button } from 'components/shadcn/button';
+import type { GetJobListingsReturnType } from 'lib/actions/jobListing';
 import type { BasicError, CompositionalComponent } from './index';
 
 // clerk components
@@ -56,10 +57,6 @@ export type JobListingBadgesProps = {
         | 'wageInterval'
     >;
 } & { className?: string };
-export type LoadingSwapProps = CompositionalComponent & {
-    className?: string;
-    isLoading: boolean;
-};
 
 export type JobListingBaseButtonProps = {
     jobListingId: string;
@@ -85,9 +82,24 @@ export type JobListingFormProps = {
     >;
 };
 
+export type JobListingMenuProps = {
+    orgId: string;
+};
+
+export type JobListingMenuGroupProps = {
+    status: JobListingStatus
+    jobListings: GetJobListingsReturnType[];
+};
+
 export type JobListingStatusUpdateButtonProps = JobListingBaseButtonProps & {
     status: JobListingStatus;
 };
+
+export type LoadingSwapProps = CompositionalComponent & {
+    className?: string;
+    isLoading: boolean;
+};
+
 
 export type MarkdownPartialProps = {
     dialogMarkdown: ReactNode;
