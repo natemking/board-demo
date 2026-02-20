@@ -249,7 +249,7 @@ const eslintConfig = defineConfig([
             /** Require use of an object spread over Object.assign. */
             'prefer-object-spread': 'warn',
             /** Require single quotes */
-            quotes: ['error', 'single'],
+            quotes: ['error', 'single', { avoidEscape: true }],
 
             /** REACT */
             /**  use TS over `prop-types`, as it can add to a project's build size. */

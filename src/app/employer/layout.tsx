@@ -4,13 +4,19 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ClipboardList, PlusIcon } from 'lucide-react';
 import { AsyncIf } from 'components/AsyncIf';
-import { SidebarGroup, SidebarGroupAction, SidebarGroupLabel } from 'components/shadcn/sidebar';
+import {
+    SidebarGroup,
+    SidebarGroupAction,
+    SidebarGroupContent,
+    SidebarGroupLabel,
+} from 'components/shadcn/sidebar';
 import { AppSidebar } from 'components/sidebar/AppSidebar';
 import { SidebarNavMenuGroup } from 'components/sidebar/SidebarNavMenuGroup';
 import { SidebarOrganizationButton } from 'components/sidebar/SidebarOrganizationButton';
 import { employerJobListingsNewUrl, organizationsSelectUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { hasOrgUserPermissions } from 'lib/services/clerk/orgUserPermissions';
+import { JobListingMenu } from 'components/job-listing/JobListingMenu';
 
 export default function EmployerLayout({ children }: { children: ReactNode }): React.JSX.Element {
     return (
@@ -43,6 +49,11 @@ async function LayoutSuspense({ children }: { children: ReactNode }): Promise<Re
                             </SidebarGroupAction>
                         </AsyncIf>
                     </SidebarGroup>
+                    <SidebarGroupContent className='group-data-[state=collapsed]:hidden'>
+                        <Suspense>
+                            <JobListingMenu orgId={orgId} />
+                        </Suspense>
+                    </SidebarGroupContent>
                     <SidebarNavMenuGroup
                         className='mt-auto'
                         items={[

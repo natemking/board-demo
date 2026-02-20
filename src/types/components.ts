@@ -56,10 +56,6 @@ export type JobListingBadgesProps = {
         | 'wageInterval'
     >;
 } & { className?: string };
-export type LoadingSwapProps = CompositionalComponent & {
-    className?: string;
-    isLoading: boolean;
-};
 
 export type JobListingBaseButtonProps = {
     jobListingId: string;
@@ -85,9 +81,19 @@ export type JobListingFormProps = {
     >;
 };
 
+export type JobListingMenuProps = {
+    orgId: string;
+};
+
 export type JobListingStatusUpdateButtonProps = JobListingBaseButtonProps & {
     status: JobListingStatus;
 };
+
+export type LoadingSwapProps = CompositionalComponent & {
+    className?: string;
+    isLoading: boolean;
+};
+
 
 export type MarkdownPartialProps = {
     dialogMarkdown: ReactNode;
