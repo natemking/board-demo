@@ -2,8 +2,14 @@
 
 import { useParams } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
+import { JobListingMenuItem } from 'components/job-listing/JobListingMenuItem';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from 'components/shadcn/collapsible';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub } from 'components/shadcn/sidebar';
+import {
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarMenuSub,
+} from 'components/shadcn/sidebar';
 import { formatJobListingsStatus } from 'lib/utils';
 import type { JobListingMenuGroupProps } from 'types';
 
@@ -30,7 +36,12 @@ export function JobListingMenuGroup({
                     </CollapsibleTrigger>
                     <CollapsibleContent>
                         <SidebarMenuSub>
-                            Hi
+                            {jobListings.map(jobListing => (
+                                <JobListingMenuItem
+                                    key={jobListing.id}
+                                    {...jobListing}
+                                />
+                            ))}
                         </SidebarMenuSub>
                     </CollapsibleContent>
                 </SidebarMenuItem>
