@@ -3,7 +3,8 @@
 import { redirect } from 'next/navigation';
 import { cacheTag } from 'next/cache';
 import type z from 'zod';
-import { and, count, desc, eq } from 'drizzle-orm';
+import { and, count, desc, eq, or } from 'drizzle-orm';
+import type { SQL } from 'drizzle-orm';
 import { db } from 'drizzle/db';
 import { JobListingApplicationTable, JobListingTable } from 'drizzle/schema';
 import {
@@ -19,7 +20,7 @@ import { hasOrgUserPermissions } from 'lib/services/clerk/orgUserPermissions';
 import { hasPlanFeature } from 'lib/services/clerk/planFeatures';
 import { getNextJobListingStatus } from 'lib/utils';
 import { jobListingFormZSchema } from 'lib/zSchema';
-import type { BasicError } from 'types';
+import type { BasicError, SearchParamsType } from 'types';
 
 export type GetJobListingsReturnType = Pick<
     typeof JobListingTable.$inferSelect,
@@ -299,4 +300,33 @@ export async function toggleJobListingFeatured(id: string): Promise<BasicError> 
     return {
         error: false,
     };
+}
+
+export async function searchJobListings(
+    searchParams: SearchParamsType,
+    jobListingId: string | undefined
+): Promise<typeof JobListingTable.$inferSelect[]> {
+    'use cache';
+
+    const whereConditions: (SQL | undefined)[] = [];
+
+    // TODO: where conditions
+
+    return await db.query.JobListingTable.findMany({
+        where: or(
+            jobListingId
+                ? and(eq(JobListingTable.status, 'published'), eq(JobListingTable.id, jobListingId))
+                : undefined,
+            and(eq(JobListingTable.status, 'published'), ...whereConditions)
+        ),
+        with: {
+            organization: {
+                columns: {
+                    name: true,
+                    imageUrl: true,
+                },
+            },
+        },
+        orderBy: [desc(JobListingTable.isFeatured), desc(JobListingTable.postedAt)],
+    });
 }

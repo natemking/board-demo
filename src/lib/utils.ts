@@ -7,6 +7,7 @@ import type {
     LocationRequirement,
     WageInterval,
 } from 'drizzle/schema';
+import type { SearchParamsType } from 'types';
 
 export function cn(...inputs: ClassValue[]): string {
     return twMerge(clsx(inputs));
@@ -126,12 +127,28 @@ export function getNextJobListingStatus(status: JobListingStatus): 'published' |
     }
 }
 
-export function sortJobListingsByStatus(a: JobListingStatus, b: JobListingStatus): number{
+export function sortJobListingsByStatus(a: JobListingStatus, b: JobListingStatus): number {
     const JOB_LISTING_STATUS_SORT_ORDER: Record<JobListingStatus, number> = {
         published: 0,
         draft: 1,
         delisted: 2,
     };
 
-    return JOB_LISTING_STATUS_SORT_ORDER[a] - JOB_LISTING_STATUS_SORT_ORDER[b]
+    return JOB_LISTING_STATUS_SORT_ORDER[a] - JOB_LISTING_STATUS_SORT_ORDER[b];
+}
+
+export function convertSearchParamsToString(searchParams: SearchParamsType): string {
+    const params = new URLSearchParams();
+
+    for (const [key, value] of Object.entries(searchParams)) {
+        if (Array.isArray(value)) {
+            for (const val of value) {
+                params.append(key, val);
+            }
+        } else {
+            params.set(key, value);
+        }
+    }
+
+    return params.toString()
 }

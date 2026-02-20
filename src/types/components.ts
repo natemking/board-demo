@@ -10,7 +10,7 @@ import type {
 } from 'drizzle/schema';
 import type { Button } from 'components/shadcn/button';
 import type { GetJobListingsReturnType } from 'lib/actions/jobListing';
-import type { BasicError, CompositionalComponent, HomePageProps } from './index';
+import type { BasicError, CompositionalComponent, SearchParams } from './index';
 
 // clerk components
 export type ClerkProviderProps = CompositionalComponent;
@@ -82,14 +82,16 @@ export type JobListingFormProps = {
     >;
 };
 
-export type JobListingItemsProps = HomePageProps;
+export type JobListingItemsProps = SearchParams & {
+    params?: Promise<{ jobListingId: string }>;
+};
 
 export type JobListingMenuProps = {
     orgId: string;
 };
 
 export type JobListingMenuGroupProps = {
-    status: JobListingStatus
+    status: JobListingStatus;
     jobListings: GetJobListingsReturnType[];
 };
 
@@ -101,7 +103,6 @@ export type LoadingSwapProps = CompositionalComponent & {
     className?: string;
     isLoading: boolean;
 };
-
 
 export type MarkdownPartialProps = {
     dialogMarkdown: ReactNode;
