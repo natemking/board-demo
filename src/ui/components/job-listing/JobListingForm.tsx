@@ -36,10 +36,10 @@ import {
     formatLocationRequirement,
     formatWageInterval,
 } from 'lib/utils';
-import states from 'lib/states.json';
 import { jobListingFormZSchema } from 'lib/zSchema';
 import { createJobListing, updateJobListing } from 'lib/actions/jobListing';
 import type { JobListingFormProps } from 'types';
+import { StateSelectItems } from 'components/StateSelectItems';
 
 const NONE_SELECT_VALUE = 'none';
 
@@ -195,15 +195,7 @@ export function JobListingForm({ jobListing }: JobListingFormProps): React.JSX.E
                                                 </SelectItem>
                                             ) : null}
 
-                                            {Object.entries(states).map(([abbrev, state]) => (
-                                                <SelectItem
-                                                    className='capitalize'
-                                                    key={abbrev}
-                                                    value={abbrev}
-                                                >
-                                                    {state}
-                                                </SelectItem>
-                                            ))}
+                                            <StateSelectItems />
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />

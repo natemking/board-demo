@@ -426,7 +426,7 @@ const eslintConfig = defineConfig([
              */
             'unicorn/prefer-node-protocol': 'warn',
             /** Enforces the use of the spread operator (...) over outdated patterns.  */
-            'unicorn/prefer-spread': 'error',
+            'unicorn/prefer-spread': 'off',
             /** Prefer ternary expressions over simple if-else statements */
             'unicorn/prefer-ternary': 'error',
             /** Enforce using the separator argument with Array#join() */
