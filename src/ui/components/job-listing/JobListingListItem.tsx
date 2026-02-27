@@ -1,9 +1,10 @@
 import { Suspense } from 'react';
 import { DaysSincePosting } from 'components/DaysSincePosting';
 import { Avatar, AvatarFallback, AvatarImage } from 'components/shadcn/avatar';
-import { Card, CardDescription, CardHeader, CardTitle } from 'components/shadcn/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'components/shadcn/card';
 import { cn } from 'lib/utils';
 import type { JobListingListItemProps } from 'types';
+import { JobListingBadges } from 'components/job-listing/JobListingBadges';
 
 export function JobListingListItem({
     jobListing,
@@ -45,16 +46,29 @@ export function JobListingListItem({
                     <div className='flex flex-col gap-1'>
                         <CardTitle className='text-xl'>{title}</CardTitle>
                         <CardDescription className='text-base'>{name}</CardDescription>
+                        {/* mobile */}
                         {postedAt ? (
-                            <div className='text-sm font-medium text-primary @min-md:hidden'>
-                                <Suspense fallback={postedAt.toLocaleDateString()}>
-                                    <DaysSincePosting postedAt={postedAt} />
-                                </Suspense>
-                            </div>
+                            <DaysSincePosting
+                                className='@min-md:hidden'
+                                postedAt={postedAt}
+                            />
                         ) : null}
                     </div>
+                    {/* desktop */}
+                    {postedAt ? (
+                        <DaysSincePosting
+                            className='ml-auto @max-md:hidden'
+                            postedAt={postedAt}
+                        />
+                    ) : null}
                 </div>
             </CardHeader>
+            <CardContent className='flex flex-wrap gap-2'>
+                <JobListingBadges
+                    className={isFeatured ? 'border-primary/35' : undefined}
+                    jobListing={jobListing}
+                />
+            </CardContent>
         </Card>
     );
 }

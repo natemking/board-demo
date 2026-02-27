@@ -20,7 +20,7 @@ import { hasOrgUserPermissions } from 'lib/services/clerk/orgUserPermissions';
 import { hasPlanFeature } from 'lib/services/clerk/planFeatures';
 import { getNextJobListingStatus } from 'lib/utils';
 import { jobListingFormZSchema } from 'lib/zSchema';
-import type { BasicError, SearchParamsType } from 'types';
+import type { BasicError, JobListingListItemProps, SearchParamsType } from 'types';
 
 export type GetJobListingsReturnType = Pick<
     typeof JobListingTable.$inferSelect,
@@ -305,7 +305,9 @@ export async function toggleJobListingFeatured(id: string): Promise<BasicError> 
 export async function searchJobListings(
     searchParams: SearchParamsType,
     jobListingId: string | undefined
-): Promise<typeof JobListingTable.$inferSelect[]> {
+): Promise<
+    (typeof JobListingTable.$inferSelect & Pick<JobListingListItemProps, 'organization'>)[]
+> {
     'use cache';
 
     const whereConditions: (SQL | undefined)[] = [];

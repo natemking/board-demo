@@ -40,6 +40,11 @@ export type AsyncIfProps = CompositionalComponent & {
     otherwise?: ReactNode;
 };
 
+export type DaySincePostingProps = {
+    className?: string;
+    postedAt: NonNullable<(typeof JobListingTable.$inferSelect)['postedAt']>;
+};
+
 export type InternalMarkDownEditorProps = MDXEditorProps & {
     editorRef?: Ref<MDXEditorMethods>;
 };
@@ -84,6 +89,23 @@ export type JobListingFormProps = {
 
 export type JobListingItemsProps = SearchParams & {
     params?: Promise<{ jobListingId: string }>;
+};
+
+export type JobListingListItemProps = {
+    jobListing: Pick<
+        typeof JobListingTable.$inferSelect,
+        | 'city'
+        | 'experienceLevel'
+        | 'isFeatured'
+        | 'locationRequirement'
+        | 'postedAt'
+        | 'stateAbbreviation'
+        | 'title'
+        | 'type'
+        | 'wage'
+        | 'wageInterval'
+    >;
+    organization: Pick<typeof OrganizationTable.$inferInsert, 'name' | 'imageUrl'>;
 };
 
 export type JobListingMenuProps = {
