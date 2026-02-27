@@ -5,6 +5,7 @@ import { searchJobListings } from 'lib/actions/jobListing';
 import { jobListingsUrl } from 'lib/constants';
 import type { JobListingItemsProps } from 'types';
 import { convertSearchParamsToString } from 'lib/utils';
+import { jobListingsSearchParamsSchema } from 'lib/zSchema';
 
 export function JobListingItems(props: JobListingItemsProps): React.JSX.Element {
     return (
@@ -19,9 +20,10 @@ async function SuspendedComponent({
     params,
 }: JobListingItemsProps): Promise<React.JSX.Element> {
     const jobListingId = params ? (await params).jobListingId : undefined;
-    const search = await searchParams;
+    
+    const { success, data } = jobListingsSearchParamsSchema.safeParse(await searchParams)
+    const search = success ? data : {};
 
-    // TODO Zod validate
     const jobListings = await searchJobListings(search, jobListingId);
 
     if (jobListings.length === 0) {
