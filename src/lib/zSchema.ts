@@ -8,13 +8,13 @@ import {
 
 const commonErrMsgs = {
     required: 'Required',
-    requireForNonRemote: 'Required for non-remote listings.'
-} as const
+    requireForNonRemote: 'Required for non-remote listings.',
+} as const;
 
 export const jobListingFormZSchema = z
     .object({
-        title: z.string().min(1, {message: commonErrMsgs.required }),
-        description: z.string().min(1, {message: commonErrMsgs.required }),
+        title: z.string().min(1, { message: commonErrMsgs.required }),
+        description: z.string().min(1, { message: commonErrMsgs.required }),
         experienceLevel: z.enum(experienceLevels),
         locationRequirement: z.enum(locationRequirements),
         type: z.enum(jobListingTypes),
@@ -47,3 +47,17 @@ export const jobListingFormZSchema = z
             path: ['stateAbbreviation'],
         }
     );
+
+export const jobListingsSearchParamsSchema = z.object({
+    title: z.string().optional().catch(undefined),
+    city: z.string().optional().catch(undefined),
+    state: z.string().optional().catch(undefined),
+    experience: z.enum(experienceLevels).optional().catch(undefined),
+    locationRequirement: z.enum(locationRequirements).optional().catch(undefined),
+    type: z.enum(jobListingTypes).optional().catch(undefined),
+    jobIds: z
+        .union([z.string(), z.array(z.string())])
+        .transform(v => (Array.isArray(v) ? v : [v]))
+        .optional()
+        .catch([]),
+});

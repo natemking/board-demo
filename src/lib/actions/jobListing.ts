@@ -3,7 +3,8 @@
 import { redirect } from 'next/navigation';
 import { cacheTag } from 'next/cache';
 import type z from 'zod';
-import { and, count, desc, eq } from 'drizzle-orm';
+import { and, count, desc, eq, ilike, or } from 'drizzle-orm';
+import type { SQL } from 'drizzle-orm';
 import { db } from 'drizzle/db';
 import { JobListingApplicationTable, JobListingTable } from 'drizzle/schema';
 import {
@@ -11,7 +12,7 @@ import {
     deleteJobListing as deleteJobListingDb,
     updateJobListing as updateJobListingDb,
 } from 'db/jobListings';
-import { getJobListingsIdTag, getJobListingsOrganizationTag } from 'db/cache/jobListings';
+import { getJobListingsGlobalTag, getJobListingsIdTag, getJobListingsOrganizationTag } from 'db/cache/jobListings';
 import { getJobListingApplicationJobListingTag } from 'db/cache/jobListingApplications';
 import { employerJobListingsUrl, employerUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
@@ -19,7 +20,8 @@ import { hasOrgUserPermissions } from 'lib/services/clerk/orgUserPermissions';
 import { hasPlanFeature } from 'lib/services/clerk/planFeatures';
 import { getNextJobListingStatus } from 'lib/utils';
 import { jobListingFormZSchema } from 'lib/zSchema';
-import type { BasicError } from 'types';
+import type { jobListingsSearchParamsSchema } from 'lib/zSchema';
+import type { BasicError, JobListingListItemProps } from 'types';
 
 export type GetJobListingsReturnType = Pick<
     typeof JobListingTable.$inferSelect,
@@ -299,4 +301,66 @@ export async function toggleJobListingFeatured(id: string): Promise<BasicError> 
     return {
         error: false,
     };
+}
+
+export async function searchJobListings(
+    searchParams: z.infer<typeof jobListingsSearchParamsSchema>,
+    jobListingId: string | undefined
+): Promise<
+    (typeof JobListingTable.$inferSelect & Pick<JobListingListItemProps, 'organization'>)[]
+> {
+    'use cache';
+    cacheTag(getJobListingsGlobalTag())
+
+    const whereConditions: (SQL | undefined)[] = [];
+
+    const { city, experience, jobIds, locationRequirement, state, title, type } = searchParams;
+
+    if (title) {
+        whereConditions.push(ilike(JobListingTable.title, `%${title}%`));
+    }
+
+    if (locationRequirement) {
+        whereConditions.push(
+            ilike(JobListingTable.locationRequirement, `%${locationRequirement}%`)
+        );
+    }
+
+    if (city) {
+        whereConditions.push(ilike(JobListingTable.city, `%${city}%`));
+    }
+
+    if (state) {
+        whereConditions.push(ilike(JobListingTable.stateAbbreviation, `%${state}%`));
+    }
+
+    if (type) {
+        whereConditions.push(ilike(JobListingTable.type, `%${type}%`));
+    }
+
+    if (experience) {
+        whereConditions.push(ilike(JobListingTable.experienceLevel, `%${experience}%`));
+    }
+
+    if (jobIds) {
+        whereConditions.push(or(...jobIds.map(id => eq(JobListingTable.id, id))))
+    }
+
+    return await db.query.JobListingTable.findMany({
+        where: or(
+            jobListingId
+                ? and(eq(JobListingTable.status, 'published'), eq(JobListingTable.id, jobListingId))
+                : undefined,
+            and(eq(JobListingTable.status, 'published'), ...whereConditions)
+        ),
+        with: {
+            organization: {
+                columns: {
+                    name: true,
+                    imageUrl: true,
+                },
+            },
+        },
+        orderBy: [desc(JobListingTable.isFeatured), desc(JobListingTable.postedAt)],
+    });
 }
