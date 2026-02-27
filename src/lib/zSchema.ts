@@ -53,7 +53,7 @@ export const jobListingsSearchParamsSchema = z.object({
     city: z.string().optional().catch(undefined),
     state: z.string().optional().catch(undefined),
     experience: z.enum(experienceLevels).optional().catch(undefined),
-    locationRequirements: z.enum(locationRequirements).optional().catch(undefined),
+    locationRequirement: z.enum(locationRequirements).optional().catch(undefined),
     type: z.enum(jobListingTypes).optional().catch(undefined),
     jobIds: z
         .union([z.string(), z.array(z.string())])
