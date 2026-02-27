@@ -92,19 +92,8 @@ export type JobListingItemsProps = SearchParams & {
 };
 
 export type JobListingListItemProps = {
-    jobListing: Pick<
-        typeof JobListingTable.$inferSelect,
-        | 'city'
-        | 'experienceLevel'
-        | 'isFeatured'
-        | 'locationRequirement'
-        | 'postedAt'
-        | 'stateAbbreviation'
-        | 'title'
-        | 'type'
-        | 'wage'
-        | 'wageInterval'
-    >;
+    jobListing: JobListingBadgesProps['jobListing'] &
+        Pick<typeof JobListingTable.$inferSelect, 'postedAt' | 'title'>;
     organization: Pick<typeof OrganizationTable.$inferInsert, 'name' | 'imageUrl'>;
 };
 

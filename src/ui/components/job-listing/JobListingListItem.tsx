@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { DaysSincePosting } from 'components/DaysSincePosting';
 import { Avatar, AvatarFallback, AvatarImage } from 'components/shadcn/avatar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'components/shadcn/card';
@@ -11,16 +10,9 @@ export function JobListingListItem({
     organization,
 }: JobListingListItemProps): React.JSX.Element {
     const {
-        city,
-        experienceLevel,
         isFeatured,
-        locationRequirement,
         postedAt,
-        stateAbbreviation,
         title,
-        type,
-        wage,
-        wageInterval,
     } = jobListing;
     const { name, imageUrl } = organization;
 
