@@ -79,7 +79,7 @@ export function JobListingFilterForm(): React.JSX.Element {
             newParams.set('type', type);
         }
 
-        router.push(`${pathname}/?${newParams.toString()}`)
+        router.push(`${pathname}/?${newParams.toString()}`);
     };
 
     return (
@@ -236,6 +236,17 @@ export function JobListingFilterForm(): React.JSX.Element {
                     type='submit'
                 >
                     <LoadingSwap isLoading={form.formState.isSubmitting}>Filter</LoadingSwap>
+                </Button>
+                <Button
+                className='-ml-3'
+                    onClick={() => {
+                        form.reset();
+                        router.push(pathname);
+                    }}
+                    type='reset'
+                    variant='link'
+                >
+                    Reset Filter
                 </Button>
             </form>
         </Form>
