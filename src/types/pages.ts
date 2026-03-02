@@ -7,3 +7,4 @@ export type JobListingPageProps = {
     params: Promise<{ jobListingId: string }>;
 };
 export type HomePageProps = SearchParams
+export type JobListingPageWithSearchParams = JobListingPageProps & SearchParams
