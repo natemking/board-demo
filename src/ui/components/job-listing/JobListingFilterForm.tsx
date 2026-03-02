@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { experienceLevels, jobListingTypes, locationRequirements } from 'drizzle/schema';
@@ -41,6 +41,8 @@ function SelectItemAny(): React.JSX.Element {
 }
 
 export function JobListingFilterForm(): React.JSX.Element {
+    const router = useRouter();
+    const pathname = usePathname();
     const searchParams = useSearchParams();
 
     const form = useForm({
@@ -58,8 +60,26 @@ export function JobListingFilterForm(): React.JSX.Element {
         },
     });
 
-    const onSubmit = async (data: z.infer<typeof jobListingFilterSchema>): Promise<void> => {
-        console.log(data);
+    const onSubmit = (data: z.infer<typeof jobListingFilterSchema>): void => {
+        const { city, experienceLevel, locationRequirement, stateAbbreviation, title, type } = data;
+        const newParams = new URLSearchParams();
+
+        if (city) newParams.set('city', city);
+        if (experienceLevel && experienceLevel !== ANY_VALUE) {
+            newParams.set('experience', experienceLevel);
+        }
+        if (locationRequirement && locationRequirement !== ANY_VALUE) {
+            newParams.set('locationRequirement', locationRequirement);
+        }
+        if (stateAbbreviation && stateAbbreviation !== ANY_VALUE) {
+            newParams.set('state', stateAbbreviation);
+        }
+        if (title) newParams.set('title', title);
+        if (type && type !== ANY_VALUE) {
+            newParams.set('type', type);
+        }
+
+        router.push(`${pathname}/?${newParams.toString()}`)
     };
 
     return (
@@ -215,9 +235,7 @@ export function JobListingFilterForm(): React.JSX.Element {
                     disabled={form.formState.isSubmitting}
                     type='submit'
                 >
-                    <LoadingSwap isLoading={form.formState.isSubmitting}>
-                        Filter
-                    </LoadingSwap>
+                    <LoadingSwap isLoading={form.formState.isSubmitting}>Filter</LoadingSwap>
                 </Button>
             </form>
         </Form>
