@@ -1,5 +1,7 @@
+import { Suspense } from 'react';
 import { IsBreakpoint } from 'components/IsBreakpoint';
 import { JobListingItems } from 'components/job-listing/JobListingItems';
+import { LoadingSpinner } from 'components/LoadingSpinner';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from 'components/shadcn/resizable';
 import type { JobListingPageWithSearchParams } from 'types';
 
@@ -18,19 +20,37 @@ export default function JobListingPage({
             // onLayoutChange={onLayoutChanged}
             orientation='horizontal'
         >
-            <ResizablePanel defaultSize='60%' id='left' minSize='30%'>
-                <div className='p-4 h-screen overflow-y-auto'>
-                    <JobListingItems params={params} searchParams={searchParams}/>
+            <ResizablePanel
+                defaultSize='60%'
+                id='left'
+                minSize='30%'
+            >
+                <div className='h-screen overflow-y-auto p-4'>
+                    <JobListingItems
+                        params={params}
+                        searchParams={searchParams}
+                    />
                 </div>
             </ResizablePanel>
             <IsBreakpoint breakpoint='min-width:1024px'>
-                <ResizableHandle className='mx-2' withHandle/>
-                <ResizablePanel defaultSize='40%' id='right' minSize='30%'>
-                    <div className='p-4 h-screen overflow-y-auto'>
-                        
+                <ResizableHandle
+                    className='mx-2'
+                    withHandle
+                />
+                <ResizablePanel
+                    defaultSize='40%'
+                    id='right'
+                    minSize='30%'
+                >
+                    <div className='h-screen overflow-y-auto p-4'>
+                        <Suspense fallback={<LoadingSpinner />}>
+                            <JobListingDetails
+                                params={params}
+                                searchParams={searchParams}
+                            />
+                        </Suspense>
                     </div>
                 </ResizablePanel>
-           
             </IsBreakpoint>
         </ResizablePanelGroup>
     );

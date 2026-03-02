@@ -2,6 +2,7 @@ import type { ComponentProps, ComponentPropsWithRef, ReactNode, Ref } from 'reac
 import type { SignInButton, SignOutButton, SignUpButton } from '@clerk/nextjs';
 import type { MDXEditorMethods, MDXEditorProps } from '@mdxeditor/editor';
 import type { MDXRemoteProps } from 'next-mdx-remote/rsc';
+import type { Loader2Icon } from 'lucide-react';
 import type {
     JobListingStatus,
     JobListingTable,
@@ -10,7 +11,7 @@ import type {
 } from 'drizzle/schema';
 import type { Button } from 'components/shadcn/button';
 import type { GetJobListingsReturnType } from 'lib/actions/jobListing';
-import type { BasicError, CompositionalComponent, SearchParams } from './index';
+import type { BasicError, CompositionalComponent, JobListingPageWithSearchParams, SearchParams } from './index';
 
 // clerk components
 export type ClerkProviderProps = CompositionalComponent;
@@ -72,6 +73,8 @@ export type JobListingBaseButtonProps = {
     jobListingId: string;
 };
 
+export type JobListingDetailsProps = JobListingPageWithSearchParams;
+
 export type JobListingFeatureToggleButtonProps = JobListingBaseButtonProps & {
     isFeatured: boolean;
 };
@@ -114,6 +117,8 @@ export type JobListingMenuGroupProps = {
 export type JobListingStatusUpdateButtonProps = JobListingBaseButtonProps & {
     status: JobListingStatus;
 };
+
+export type LoadingSpinnerProps = ComponentProps<typeof Loader2Icon>
 
 export type LoadingSwapProps = CompositionalComponent & {
     className?: string;
