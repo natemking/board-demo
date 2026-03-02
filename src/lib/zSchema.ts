@@ -5,6 +5,7 @@ import {
     locationRequirements,
     wageIntervals,
 } from 'drizzle/schema';
+import { ANY_VALUE } from 'lib/constants';
 
 const commonErrMsgs = {
     required: 'Required',
@@ -61,3 +62,12 @@ export const jobListingsSearchParamsSchema = z.object({
         .optional()
         .catch([]),
 });
+
+export const jobListingFilterSchema = z.object({
+    title: z.string().optional(),
+    city: z.string().optional(),
+    stateAbbreviation: z.string().or(z.literal(ANY_VALUE)).optional(),
+    experienceLevel: z.enum(experienceLevels).or(z.literal(ANY_VALUE)).optional(),
+    type: z.enum(jobListingTypes).or(z.literal(ANY_VALUE)).optional(),
+    locationRequirement: z.enum(locationRequirements).or(z.literal(ANY_VALUE)).optional(),
+})

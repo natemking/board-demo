@@ -14,3 +14,5 @@ export const aiSearchUrl = '/ai-search',
     userSettingsNotificationsUrl = `${userSettingsUrl}/${notificationsRouteSegment}`,
     signInUrl = '/sign-in',
     jobListingsUrl = '/job-listings';
+
+export const ANY_VALUE = 'any';

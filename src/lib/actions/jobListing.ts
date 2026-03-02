@@ -313,6 +313,7 @@ export async function searchJobListings(
     cacheTag(getJobListingsGlobalTag())
 
     const whereConditions: (SQL | undefined)[] = [];
+   
 
     const { city, experience, jobIds, locationRequirement, state, title, type } = searchParams;
 
@@ -322,7 +323,7 @@ export async function searchJobListings(
 
     if (locationRequirement) {
         whereConditions.push(
-            ilike(JobListingTable.locationRequirement, `%${locationRequirement}%`)
+            eq(JobListingTable.locationRequirement, locationRequirement)
         );
     }
 
@@ -331,15 +332,15 @@ export async function searchJobListings(
     }
 
     if (state) {
-        whereConditions.push(ilike(JobListingTable.stateAbbreviation, `%${state}%`));
+        whereConditions.push(eq(JobListingTable.stateAbbreviation, state));
     }
 
     if (type) {
-        whereConditions.push(ilike(JobListingTable.type, `%${type}%`));
+        whereConditions.push(eq(JobListingTable.type, type));
     }
 
     if (experience) {
-        whereConditions.push(ilike(JobListingTable.experienceLevel, `%${experience}%`));
+        whereConditions.push(eq(JobListingTable.experienceLevel, experience));
     }
 
     if (jobIds) {
