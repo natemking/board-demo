@@ -49,6 +49,11 @@ export type InternalMarkDownEditorProps = MDXEditorProps & {
     editorRef?: Ref<MDXEditorMethods>;
 };
 
+export type IsBreakpointProps = CompositionalComponent & {
+    breakpoint: string;
+    otherwise?: ReactNode;
+};
+
 export type JobListingBadgesProps = {
     jobListing: Pick<
         typeof JobListingTable.$inferSelect,
