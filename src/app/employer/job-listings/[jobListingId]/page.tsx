@@ -10,7 +10,7 @@ import { JobListingBadges } from 'components/job-listing/JobListingBadges';
 import { MarkdownRenderer } from 'components/markdown/MarkdownRenderer';
 import { MarkdownPartial } from 'components/markdown/MarkdownPartial';
 import { Badge } from 'components/shadcn/badge';
-import { getJobListingByJobListingId } from 'lib/actions/jobListing';
+import { ggetJobListingByJobListingIdForOrg } from 'lib/actions/jobListing';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
 import { formatJobListingsStatus } from 'lib/utils';
 import type { JobListingPageProps } from 'types';
@@ -30,7 +30,7 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
 
     const { jobListingId } = await params;
 
-    const jobListing = await getJobListingByJobListingId(jobListingId, orgId);
+    const jobListing = await ggetJobListingByJobListingIdForOrg(jobListingId, orgId);
 
     if (!jobListing) return notFound();
 

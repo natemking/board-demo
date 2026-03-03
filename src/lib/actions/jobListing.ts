@@ -6,13 +6,18 @@ import type z from 'zod';
 import { and, count, desc, eq, ilike, or } from 'drizzle-orm';
 import type { SQL } from 'drizzle-orm';
 import { db } from 'drizzle/db';
+import type { OrganizationTable } from 'drizzle/schema';
 import { JobListingApplicationTable, JobListingTable } from 'drizzle/schema';
 import {
     insertJobListing,
     deleteJobListing as deleteJobListingDb,
     updateJobListing as updateJobListingDb,
 } from 'db/jobListings';
-import { getJobListingsGlobalTag, getJobListingsIdTag, getJobListingsOrganizationTag } from 'db/cache/jobListings';
+import {
+    getJobListingsGlobalTag,
+    getJobListingsIdTag,
+    getJobListingsOrganizationTag,
+} from 'db/cache/jobListings';
 import { getJobListingApplicationJobListingTag } from 'db/cache/jobListingApplications';
 import { employerJobListingsUrl, employerUrl } from 'lib/constants';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
@@ -21,7 +26,8 @@ import { hasPlanFeature } from 'lib/services/clerk/planFeatures';
 import { getNextJobListingStatus } from 'lib/utils';
 import { jobListingFormZSchema } from 'lib/zSchema';
 import type { jobListingsSearchParamsSchema } from 'lib/zSchema';
-import type { BasicError, JobListingListItemProps } from 'types';
+import type { BasicError } from 'types';
+import { getOrganizationIdTag } from 'lib/db/cache/organizations';
 
 export type GetJobListingsReturnType = Pick<
     typeof JobListingTable.$inferSelect,
@@ -100,7 +106,7 @@ export async function getFeaturedJobListingsCount(orgId: string): Promise<number
     return res.count;
 }
 
-export async function getJobListingByJobListingId(
+export async function ggetJobListingByJobListingIdForOrg(
     jobListingId: string,
     orgId: string
 ): Promise<typeof JobListingTable.$inferSelect | undefined> {
@@ -166,7 +172,7 @@ export async function updateJobListing(
         };
     }
 
-    const jobListing = await getJobListingByJobListingId(id, orgId);
+    const jobListing = await ggetJobListingByJobListingIdForOrg(id, orgId);
 
     if (!jobListing) {
         return {
@@ -190,7 +196,7 @@ export async function deleteJobListing(id: string): Promise<BasicError> {
 
     if (!orgId) return error;
 
-    const jobListing = await getJobListingByJobListingId(id, orgId);
+    const jobListing = await ggetJobListingByJobListingIdForOrg(id, orgId);
 
     if (!jobListing) return error;
 
@@ -242,7 +248,7 @@ export async function toggleJobListingStatus(id: string): Promise<BasicError> {
 
     if (!orgId) return error;
 
-    const jobListing = await getJobListingByJobListingId(id, orgId);
+    const jobListing = await ggetJobListingByJobListingIdForOrg(id, orgId);
 
     if (!jobListing) return error;
 
@@ -279,7 +285,7 @@ export async function toggleJobListingFeatured(id: string): Promise<BasicError> 
 
     if (!orgId) return error;
 
-    const jobListing = await getJobListingByJobListingId(id, orgId);
+    const jobListing = await ggetJobListingByJobListingIdForOrg(id, orgId);
 
     if (!jobListing) return error;
 
@@ -307,13 +313,14 @@ export async function searchJobListings(
     searchParams: z.infer<typeof jobListingsSearchParamsSchema>,
     jobListingId: string | undefined
 ): Promise<
-    (typeof JobListingTable.$inferSelect & Pick<JobListingListItemProps, 'organization'>)[]
+    (typeof JobListingTable.$inferSelect & {
+        organization: Pick<typeof OrganizationTable.$inferSelect, 'id' | 'name' | 'imageUrl'>;
+    })[]
 > {
     'use cache';
-    cacheTag(getJobListingsGlobalTag())
+    cacheTag(getJobListingsGlobalTag());
 
     const whereConditions: (SQL | undefined)[] = [];
-   
 
     const { city, experience, jobIds, locationRequirement, state, title, type } = searchParams;
 
@@ -322,9 +329,7 @@ export async function searchJobListings(
     }
 
     if (locationRequirement) {
-        whereConditions.push(
-            eq(JobListingTable.locationRequirement, locationRequirement)
-        );
+        whereConditions.push(eq(JobListingTable.locationRequirement, locationRequirement));
     }
 
     if (city) {
@@ -344,10 +349,10 @@ export async function searchJobListings(
     }
 
     if (jobIds) {
-        whereConditions.push(or(...jobIds.map(id => eq(JobListingTable.id, id))))
+        whereConditions.push(or(...jobIds.map(id => eq(JobListingTable.id, id))));
     }
 
-    return await db.query.JobListingTable.findMany({
+    const jobListings = await db.query.JobListingTable.findMany({
         where: or(
             jobListingId
                 ? and(eq(JobListingTable.status, 'published'), eq(JobListingTable.id, jobListingId))
@@ -357,6 +362,7 @@ export async function searchJobListings(
         with: {
             organization: {
                 columns: {
+                    id: true,
                     name: true,
                     imageUrl: true,
                 },
@@ -364,4 +370,39 @@ export async function searchJobListings(
         },
         orderBy: [desc(JobListingTable.isFeatured), desc(JobListingTable.postedAt)],
     });
+
+    for (const listing of jobListings) {
+        cacheTag(getOrganizationIdTag(listing.organization.id));
+    }
+
+    return jobListings;
+}
+
+export async function getJobListing(jobListingId: string): Promise<
+    | (typeof JobListingTable.$inferSelect & {
+          organization: Pick<typeof OrganizationTable.$inferSelect, 'id' | 'name' | 'imageUrl'>;
+      })
+    | undefined
+> {
+    'use cache';
+    cacheTag(getJobListingsIdTag(jobListingId));
+
+    const listing = await db.query.JobListingTable.findFirst({
+        where: and(eq(JobListingTable.id, jobListingId), eq(JobListingTable.status, 'published')),
+        with: {
+            organization: {
+                columns: {
+                    id: true,
+                    name: true,
+                    imageUrl: true,
+                },
+            },
+        },
+    });
+
+    if (listing) {
+        cacheTag(getOrganizationIdTag(listing.organization.id));
+    }
+
+    return listing;
 }
