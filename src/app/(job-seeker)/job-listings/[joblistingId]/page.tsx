@@ -35,23 +35,27 @@ export default function JobListingPage({
                     />
                 </div>
             </ResizablePanel>
-            <IsBreakpoint breakpoint='min-width:1024px'>
-                <ClientSheet>
-                    <SheetContent
-                        className='p-4'
-                        hideCloseButton
-                    >
-                        <SheetHeader className='sr-only'>
-                            <SheetTitle>Job Listing Details</SheetTitle>
-                        </SheetHeader>
-                        <Suspense fallback={<LoadingSpinner />}>
-                            <JobListingDetails
-                                params={params}
-                                searchParams={searchParams}
-                            />
-                        </Suspense>
-                    </SheetContent>
-                </ClientSheet>
+            <IsBreakpoint
+                breakpoint='min-width:1024px'
+                otherwise={
+                    <ClientSheet>
+                        <SheetContent
+                            className='p-4'
+                            hideCloseButton
+                        >
+                            <SheetHeader className='sr-only'>
+                                <SheetTitle>Job Listing Details</SheetTitle>
+                            </SheetHeader>
+                            <Suspense fallback={<LoadingSpinner />}>
+                                <JobListingDetails
+                                    params={params}
+                                    searchParams={searchParams}
+                                />
+                            </Suspense>
+                        </SheetContent>
+                    </ClientSheet>
+                }
+            >
                 <ResizableHandle
                     className='mx-2'
                     withHandle
