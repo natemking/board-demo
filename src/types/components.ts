@@ -41,6 +41,8 @@ export type AsyncIfProps = CompositionalComponent & {
     otherwise?: ReactNode;
 };
 
+export type ClientSheetProps = CompositionalComponent
+
 export type DaySincePostingProps = {
     className?: string;
     postedAt: NonNullable<(typeof JobListingTable.$inferSelect)['postedAt']>;

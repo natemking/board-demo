@@ -1,8 +1,11 @@
 import { Suspense } from 'react';
+import { ClientSheet } from 'components/ClientSheet';
 import { IsBreakpoint } from 'components/IsBreakpoint';
-import { JobListingItems } from 'components/job-listing/JobListingItems';
 import { LoadingSpinner } from 'components/LoadingSpinner';
+import { JobListingDetails } from 'components/job-listing/JobListingDetails';
+import { JobListingItems } from 'components/job-listing/JobListingItems';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from 'components/shadcn/resizable';
+import { SheetContent, SheetHeader, SheetTitle } from 'components/shadcn/sheet';
 import type { JobListingPageWithSearchParams } from 'types';
 
 export default function JobListingPage({
@@ -33,6 +36,22 @@ export default function JobListingPage({
                 </div>
             </ResizablePanel>
             <IsBreakpoint breakpoint='min-width:1024px'>
+                <ClientSheet>
+                    <SheetContent
+                        className='p-4'
+                        hideCloseButton
+                    >
+                        <SheetHeader className='sr-only'>
+                            <SheetTitle>Job Listing Details</SheetTitle>
+                        </SheetHeader>
+                        <Suspense fallback={<LoadingSpinner />}>
+                            <JobListingDetails
+                                params={params}
+                                searchParams={searchParams}
+                            />
+                        </Suspense>
+                    </SheetContent>
+                </ClientSheet>
                 <ResizableHandle
                     className='mx-2'
                     withHandle
