@@ -4,7 +4,7 @@ import { JobListingForm } from 'components/job-listing/JobListingForm';
 import { Card, CardContent } from 'components/shadcn/card';
 import type { JobListingPageProps } from 'types';
 import { getCurrentOrganization } from 'lib/services/clerk/getCurrentAuth';
-import { getJobListingByJobListingId } from 'lib/actions/jobListing';
+import { ggetJobListingByJobListingIdForOrg } from 'lib/actions/jobListing';
 
 export default function EditJobListingPage(props: JobListingPageProps): React.JSX.Element {
     return (
@@ -29,7 +29,7 @@ async function SuspendedPage({ params }: JobListingPageProps): Promise<React.JSX
 
     const { jobListingId } = await params;
 
-    const jobListing = await getJobListingByJobListingId(jobListingId, orgId);
+    const jobListing = await ggetJobListingByJobListingIdForOrg(jobListingId, orgId);
 
     if (!jobListing) return notFound();
 
