@@ -6,6 +6,8 @@ import { Button } from 'components/shadcn/button';
 import { getJobListing } from 'lib/actions/jobListing';
 import { convertSearchParamsToString } from 'lib/utils';
 import type { JobListingDetailsProps } from 'types';
+import { JobListingBadges } from 'components/job-listing/JobListingBadges';
+import { MarkdownRenderer } from 'components/markdown/MarkdownRenderer';
 
 export async function JobListingDetails({
     params,
@@ -17,7 +19,7 @@ export async function JobListingDetails({
 
     if (!jobListing) return notFound()
 
-    const { organization, postedAt, title } = jobListing;
+    const {description, organization, postedAt, title } = jobListing;
 
     const orgNameInitials = organization.name.split('').splice(0,4).map(word => word[0]).join(',')
 
@@ -57,7 +59,11 @@ export async function JobListingDetails({
                         </Button>
                     </div>
                 </div>
+                <div className='flex flex-wrap gap-2 mt-2'>
+                    <JobListingBadges jobListing={jobListing} />
+                </div>
             </div>
+            <MarkdownRenderer source={description}/>
         </div>
     );
 }
