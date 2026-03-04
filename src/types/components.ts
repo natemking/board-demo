@@ -11,15 +11,20 @@ import type {
 } from 'drizzle/schema';
 import type { Button } from 'components/shadcn/button';
 import type { GetJobListingsReturnType } from 'lib/actions/jobListing';
-import type { BasicError, CompositionalComponent, JobListingPageWithSearchParams, SearchParams } from './index';
+import type {
+    BasicError,
+    CompositionalComponent,
+    JobListingPageWithSearchParams,
+    SearchParams,
+} from './index';
 
 // clerk components
 export type ClerkProviderProps = CompositionalComponent;
 export type SignedOutStatusProps = CompositionalComponent;
 export type SignedInStatusProps = CompositionalComponent;
-export type SignUpButtonProps = CompositionalComponent & ComponentProps<typeof SignUpButton>;
-export type SignInButtonProps = CompositionalComponent & ComponentProps<typeof SignInButton>;
-export type SignOutButtonProps = CompositionalComponent & ComponentProps<typeof SignOutButton>;
+export type SignUpButtonProps = Partial<CompositionalComponent> & ComponentProps<typeof SignUpButton>;
+export type SignInButtonProps = Partial<CompositionalComponent> & ComponentProps<typeof SignInButton>;
+export type SignOutButtonProps = Partial<CompositionalComponent> & ComponentProps<typeof SignOutButton>;
 
 // components
 export type ActionButtonProps = Omit<ComponentPropsWithRef<typeof Button>, 'onClick'> & {
@@ -35,13 +40,15 @@ export type AppSidebarProps = CompositionalComponent & {
     footerButton: ReactNode;
 };
 
+export type ApplyButtonProps = { jobListingId: string };
+
 export type AsyncIfProps = CompositionalComponent & {
     condition: () => Promise<boolean>;
     loadingFallback?: ReactNode;
     otherwise?: ReactNode;
 };
 
-export type ClientSheetProps = CompositionalComponent
+export type ClientSheetProps = CompositionalComponent;
 
 export type DaySincePostingProps = {
     className?: string;
@@ -120,7 +127,7 @@ export type JobListingStatusUpdateButtonProps = JobListingBaseButtonProps & {
     status: JobListingStatus;
 };
 
-export type LoadingSpinnerProps = ComponentProps<typeof Loader2Icon>
+export type LoadingSpinnerProps = ComponentProps<typeof Loader2Icon>;
 
 export type LoadingSwapProps = CompositionalComponent & {
     className?: string;
