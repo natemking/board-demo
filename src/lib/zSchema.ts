@@ -70,4 +70,11 @@ export const jobListingFilterSchema = z.object({
     experienceLevel: z.enum(experienceLevels).or(z.literal(ANY_VALUE)).optional(),
     type: z.enum(jobListingTypes).or(z.literal(ANY_VALUE)).optional(),
     locationRequirement: z.enum(locationRequirements).or(z.literal(ANY_VALUE)).optional(),
-})
+});
+
+export const newJobListingApplicationSchema = z.object({
+    coverLetter: z
+        .string()
+        .transform(val => (val.trim() === '' ? null : val))
+        .nullable(),
+});

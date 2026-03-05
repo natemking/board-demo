@@ -15,6 +15,12 @@ export type Events = {
     'clerk/organization.created': ClerkWebhookData<OrganizationJSON>;
     'clerk/organization.updated': ClerkWebhookData<OrganizationJSON>;
     'clerk/organization.deleted': ClerkWebhookData<DeletedObjectJSON>;
+    'app/jobListingApplication.created': {
+        data: {
+            jobListingId: string,
+            userId: string
+        }
+    }
 };
 
 export type UserPermission =

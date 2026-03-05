@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 export type CompositionalComponent = { children: ReactNode };
 export type BasicError = { error: boolean; message?: string };
+export type JobListingIdType = { jobListingId: string }
 export type SearchParamsType = Record<string, string | string[]>;
 export type SearchParams = {
     searchParams: Promise<SearchParamsType>;

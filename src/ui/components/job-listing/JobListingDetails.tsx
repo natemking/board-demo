@@ -1,13 +1,15 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { XIcon } from 'lucide-react';
+import { ApplyButton } from 'components/ApplyButton';
+import { JobListingBadges } from 'components/job-listing/JobListingBadges';
+import { MarkdownRenderer } from 'components/markdown/MarkdownRenderer';
 import { Avatar, AvatarFallback, AvatarImage } from 'components/shadcn/avatar';
 import { Button } from 'components/shadcn/button';
 import { getJobListing } from 'lib/actions/jobListing';
 import { convertSearchParamsToString } from 'lib/utils';
 import type { JobListingDetailsProps } from 'types';
-import { JobListingBadges } from 'components/job-listing/JobListingBadges';
-import { MarkdownRenderer } from 'components/markdown/MarkdownRenderer';
 
 export async function JobListingDetails({
     params,
@@ -17,11 +19,15 @@ export async function JobListingDetails({
 
     const jobListing = await getJobListing(jobListingId);
 
-    if (!jobListing) return notFound()
+    if (!jobListing) return notFound();
 
-    const {description, organization, postedAt, title } = jobListing;
+    const { description, organization, postedAt, title } = jobListing;
 
-    const orgNameInitials = organization.name.split('').splice(0,4).map(word => word[0]).join(',')
+    const orgNameInitials = organization.name
+        .split('')
+        .splice(0, 4)
+        .map(word => word[0])
+        .join(',');
 
     return (
         <div className='@container space-y-6'>
@@ -51,7 +57,11 @@ export async function JobListingDetails({
                                 {postedAt.toLocaleDateString()}
                             </div>
                         ) : null}
-                        <Button asChild size='icon' variant='outline'>
+                        <Button
+                            asChild
+                            size='icon'
+                            variant='outline'
+                        >
                             <Link href={`/?${convertSearchParamsToString(await searchParams)}`}>
                                 <span className='sr-only'>Close</span>
                                 <XIcon />
@@ -59,11 +69,14 @@ export async function JobListingDetails({
                         </Button>
                     </div>
                 </div>
-                <div className='flex flex-wrap gap-2 mt-2'>
+                <div className='mt-2 flex flex-wrap gap-2'>
                     <JobListingBadges jobListing={jobListing} />
                 </div>
+                <Suspense fallback={<Button disabled>Apply</Button>}>
+                    <ApplyButton jobListingId={jobListingId} />
+                </Suspense>
             </div>
-            <MarkdownRenderer source={description}/>
+            <MarkdownRenderer source={description} />
         </div>
     );
 }
