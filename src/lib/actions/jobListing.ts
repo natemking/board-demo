@@ -406,3 +406,16 @@ export async function getJobListing(jobListingId: string): Promise<
 
     return listing;
 }
+
+export async function getPublicJobListing(
+    jobListingId: string
+): Promise<Pick<typeof JobListingTable.$inferSelect, 'id'> | undefined> {
+    'use cache';
+
+    cacheTag(getJobListingsIdTag(jobListingId));
+
+    return db.query.JobListingTable.findFirst({
+        where: and(eq(JobListingTable.id, jobListingId), eq(JobListingTable.status, 'published')),
+        columns: { id: true },
+    });
+}
