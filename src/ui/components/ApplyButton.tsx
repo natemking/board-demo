@@ -2,6 +2,14 @@ import Link from 'next/link';
 import { connection } from 'next/server';
 import { differenceInDays } from 'date-fns';
 import { Button } from 'components/shadcn/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from 'components/shadcn/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from 'components/shadcn/popover';
 import { SignUpButton } from 'services/clerk/components/AuthBtns';
 import { getCurrentUser } from 'services/clerk/getCurrentAuth';
@@ -55,14 +63,30 @@ export async function ApplyButton({ jobListingId }: ApplyButtonProps): Promise<R
                 <PopoverContent className='flex flex-col gap-2'>
                     You need to upload a resume before applying for a job.
                     <Button asChild>
-                        <Link href={userSettingsResumeUrl}>
-                            Upload Resume
-                        </Link>
+                        <Link href={userSettingsResumeUrl}>Upload Resume</Link>
                     </Button>
                 </PopoverContent>
             </Popover>
         );
     }
 
-    return <div>Enter</div>;
+    return (
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button>Apply</Button>
+            </DialogTrigger>
+            <DialogContent className='flex max-h-[calc(100%-2rem)] flex-col overflow-hidden md:max-w-3xl'>
+                <DialogHeader>
+                    <DialogTitle>Application</DialogTitle>
+                    <DialogDescription>
+                        Applying for a job cannot be undone and is something you can only do once
+                        per job listing.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className='flex-1 overflow-y-auto'>
+        
+                </div>
+            </DialogContent>
+        </Dialog>
+    );
 }
