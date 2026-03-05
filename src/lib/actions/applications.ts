@@ -5,14 +5,14 @@ import { cacheTag } from 'next/cache';
 import { and, eq } from 'drizzle-orm';
 import { db } from 'drizzle/db';
 import { JobListingApplicationTable } from 'drizzle/schema';
-import { getJobListingApplicationIdTag } from 'lib/db/cache/jobListingApplications';
-import { jobListingFormZSchema, type newJobListingApplicationSchema } from 'lib/zSchema';
-import type { BasicError } from 'types';
+import { getJobListingApplicationIdTag } from 'db/cache/jobListingApplications';
+import { inngest } from 'services/inngest/client';
 import { getCurrentUser } from 'services/clerk/getCurrentAuth';
 import { getUserResumeUserId } from 'lib/actions/userResume';
 import { getPublicJobListing } from 'lib/actions/jobListing';
 import { insertJobListingApplication } from 'lib/db/jobListingApplications';
-import { inngest } from 'lib/services/inngest/client';
+import { newJobListingApplicationSchema } from 'lib/zSchema';
+import type { BasicError } from 'types';
 
 export async function getJobListingApplication(
     jobListingId: string,
@@ -49,7 +49,9 @@ export async function createJobListingApplication(
 
     if (!userResume || !jobListing) return permissionError;
 
-    const { success, data } = jobListingFormZSchema.safeParse(unsafeData);
+    const { success, data } = newJobListingApplicationSchema.safeParse(unsafeData);
+
+    console.log(success);
 
     if (!success) {
         return {
