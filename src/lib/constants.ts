@@ -12,6 +12,7 @@ export const aiSearchUrl = '/ai-search',
     organizationsSelectUrl = `${organizationsUrl}/select`,
     userSettingsUrl = '/user-settings',
     userSettingsNotificationsUrl = `${userSettingsUrl}/${notificationsRouteSegment}`,
+    userSettingsResumeUrl = `${userSettingsUrl}/resume`,
     signInUrl = '/sign-in',
     jobListingsUrl = '/job-listings';
 
