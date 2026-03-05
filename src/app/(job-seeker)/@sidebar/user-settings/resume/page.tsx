@@ -1,5 +1,5 @@
-import { JobBoardSidebar } from 'components/sidebar/JobBoardSidebar';
+import { UserSettingsSideBar } from 'components/sidebar/UserSettingsSideBar';
 
 export default function JobBoardSidebarPage(): React.JSX.Element {
-    return <JobBoardSidebar />;
+    return <UserSettingsSideBar />;
 }
