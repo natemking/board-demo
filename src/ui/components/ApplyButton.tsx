@@ -17,6 +17,7 @@ import { getJobListingApplication } from 'lib/actions/applications';
 import { getUserResume } from 'lib/actions/userResume';
 import { userSettingsResumeUrl } from 'lib/constants';
 import type { ApplyButtonProps } from 'types';
+import { NewJobListingApplicationForm } from 'components/application/NewJobListingApplicationForm';
 
 export async function ApplyButton({ jobListingId }: ApplyButtonProps): Promise<React.JSX.Element> {
     const { userId } = await getCurrentUser();
@@ -52,23 +53,23 @@ export async function ApplyButton({ jobListingId }: ApplyButtonProps): Promise<R
         );
     }
 
-    const userResume = await getUserResume(userId);
+    // const userResume = await getUserResume(userId);
 
-    if (!userResume) {
-        return (
-            <Popover>
-                <PopoverTrigger asChild>
-                    <Button>Apply</Button>
-                </PopoverTrigger>
-                <PopoverContent className='flex flex-col gap-2'>
-                    You need to upload a resume before applying for a job.
-                    <Button asChild>
-                        <Link href={userSettingsResumeUrl}>Upload Resume</Link>
-                    </Button>
-                </PopoverContent>
-            </Popover>
-        );
-    }
+    // if (!userResume) {
+    //     return (
+    //         <Popover>
+    //             <PopoverTrigger asChild>
+    //                 <Button>Apply</Button>
+    //             </PopoverTrigger>
+    //             <PopoverContent className='flex flex-col gap-2'>
+    //                 You need to upload a resume before applying for a job.
+    //                 <Button asChild>
+    //                     <Link href={userSettingsResumeUrl}>Upload Resume</Link>
+    //                 </Button>
+    //             </PopoverContent>
+    //         </Popover>
+    //     );
+    // }
 
     return (
         <Dialog>
@@ -84,7 +85,7 @@ export async function ApplyButton({ jobListingId }: ApplyButtonProps): Promise<R
                     </DialogDescription>
                 </DialogHeader>
                 <div className='flex-1 overflow-y-auto'>
-        
+                    <NewJobListingApplicationForm jobListingId={jobListingId}/>
                 </div>
             </DialogContent>
         </Dialog>

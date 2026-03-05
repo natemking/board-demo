@@ -14,6 +14,7 @@ import type { GetJobListingsReturnType } from 'lib/actions/jobListing';
 import type {
     BasicError,
     CompositionalComponent,
+    JobListingIdType,
     JobListingPageWithSearchParams,
     SearchParams,
 } from './index';
@@ -22,9 +23,12 @@ import type {
 export type ClerkProviderProps = CompositionalComponent;
 export type SignedOutStatusProps = CompositionalComponent;
 export type SignedInStatusProps = CompositionalComponent;
-export type SignUpButtonProps = Partial<CompositionalComponent> & ComponentProps<typeof SignUpButton>;
-export type SignInButtonProps = Partial<CompositionalComponent> & ComponentProps<typeof SignInButton>;
-export type SignOutButtonProps = Partial<CompositionalComponent> & ComponentProps<typeof SignOutButton>;
+export type SignUpButtonProps = Partial<CompositionalComponent> &
+    ComponentProps<typeof SignUpButton>;
+export type SignInButtonProps = Partial<CompositionalComponent> &
+    ComponentProps<typeof SignInButton>;
+export type SignOutButtonProps = Partial<CompositionalComponent> &
+    ComponentProps<typeof SignOutButton>;
 
 // components
 export type ActionButtonProps = Omit<ComponentPropsWithRef<typeof Button>, 'onClick'> & {
@@ -40,7 +44,7 @@ export type AppSidebarProps = CompositionalComponent & {
     footerButton: ReactNode;
 };
 
-export type ApplyButtonProps = { jobListingId: string };
+export type ApplyButtonProps = JobListingIdType;
 
 export type AsyncIfProps = CompositionalComponent & {
     condition: () => Promise<boolean>;
@@ -78,9 +82,7 @@ export type JobListingBadgesProps = {
     >;
 } & { className?: string };
 
-export type JobListingBaseButtonProps = {
-    jobListingId: string;
-};
+export type JobListingBaseButtonProps = JobListingIdType;
 
 export type JobListingDetailsProps = JobListingPageWithSearchParams;
 
@@ -105,7 +107,7 @@ export type JobListingFormProps = {
 };
 
 export type JobListingItemsProps = SearchParams & {
-    params?: Promise<{ jobListingId: string }>;
+    params?: Promise<JobListingIdType>;
 };
 
 export type JobListingListItemProps = {
@@ -143,6 +145,8 @@ export type MarkdownPartialProps = {
 export type MarkdownRendererProps = MDXRemoteProps & {
     className?: string;
 };
+
+export type NewJobListingApplicationFormProps = JobListingIdType;
 
 export type SidebarNavGroupProps = {
     className?: string;
