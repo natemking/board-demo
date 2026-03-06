@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono as GeistMono } from 'next/font/google';
 import { Toaster } from 'sonner';
-import { UploadThingSSR } from 'components/Dropzone/UploadThingSSR';
+import { UploadThingSsr } from 'components/Dropzone/UploadThingSsr';
 import { ClerkProvider } from 'services/clerk/components/ClerkProvider';
 import './globals.css';
 import '@mdxeditor/editor/style.css'
@@ -34,7 +34,7 @@ export default function RootLayout({
                 >
                     {children}
                     <Toaster />
-                    <UploadThingSSR />
+                    <UploadThingSsr />
                 </body>
             </html>
         </ClerkProvider>

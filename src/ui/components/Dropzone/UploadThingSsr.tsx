@@ -4,15 +4,15 @@ import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
 import { extractRouterConfig } from 'uploadthing/server';
 import { customFileRouter } from 'lib/services/upload-thing/router';
 
-async function UtSSR(): Promise<React.JSX.Element> {
+async function UtSsr(): Promise<React.JSX.Element> {
     await connection();
     return <NextSSRPlugin routerConfig={extractRouterConfig(customFileRouter)} />;
 }
 
-export function UploadThingSSR(): React.JSX.Element {
+export function UploadThingSsr(): React.JSX.Element {
     return (
         <Suspense>
-            <UtSSR />
+            <UtSsr />
         </Suspense>
     );
 }
