@@ -39,8 +39,8 @@ export const customFileRouter = {
                 resumeFileKey: file.key,
             });
 
-            //TODO: Delete old resume
-
+    
+            //TODO:
             await inngest.send({
                 name: 'app/resume.uploaded',
                 user: {
