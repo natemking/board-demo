@@ -3,6 +3,8 @@ import { UploadThingError } from 'uploadthing/server';
 import { getCurrentUser } from 'services/clerk/getCurrentAuth';
 import { inngest } from 'services/inngest/client';
 import { upsertUserResume } from 'lib/db/userResumes';
+import { getUserResumeFileKey } from 'lib/actions/userResume';
+import { uploadThing } from 'lib/services/upload-thing/client';
 
 const f = createUploadthing();
 
@@ -25,6 +27,12 @@ export const customFileRouter = {
         })
         .onUploadComplete(async ({ metadata, file }) => {
             const { userId } = metadata;
+
+            const resumeFileKey = await getUserResumeFileKey(userId);
+
+            if (resumeFileKey) {
+                await uploadThing.deleteFiles(resumeFileKey)
+            }
 
             await upsertUserResume(userId, {
                 resumeFileUrl: file.ufsUrl,

@@ -1,4 +1,4 @@
-'use server'
+'use server';
 
 import { cacheTag } from 'next/cache';
 import { eq } from 'drizzle-orm';
@@ -9,8 +9,8 @@ import { getUserResumeIdTag } from 'lib/db/cache/userResume';
 export async function getUserResume(
     userId: string
 ): Promise<typeof UserResumeTable.$inferSelect | undefined> {
-    'use cache'
-    cacheTag(getUserResumeIdTag(userId))
+    'use cache';
+    cacheTag(getUserResumeIdTag(userId));
 
     const resume = db.query.UserResumeTable.findFirst({
         where: eq(UserResumeTable.userId, userId),
@@ -22,13 +22,24 @@ export async function getUserResume(
 export async function getUserResumeUserId(
     userId: string
 ): Promise<Pick<typeof UserResumeTable.$inferSelect, 'userId'> | undefined> {
-    'use cache'
-    cacheTag(getUserResumeIdTag(userId))
+    'use cache';
+    cacheTag(getUserResumeIdTag(userId));
 
     const resume = db.query.UserResumeTable.findFirst({
         where: eq(UserResumeTable.userId, userId),
-        columns: { userId: true }
+        columns: { userId: true },
     });
 
     return resume;
+}
+
+export async function getUserResumeFileKey(
+    userId: string
+): Promise<string | undefined> {
+    const data = await db.query.UserResumeTable.findFirst({
+        where: eq(UserResumeTable.userId, userId),
+        columns: { resumeFileKey: true },
+    });
+
+    return data?.resumeFileKey;
 }
