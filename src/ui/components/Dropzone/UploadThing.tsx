@@ -6,7 +6,7 @@ import { generateUploadDropzone } from '@uploadthing/react';
 import type { CustomFileRouter } from 'lib/services/upload-thing/router';
 import { cn } from 'lib/utils';
 
-export const UploadDropzoneComponent = generateUploadDropzone<CustomFileRouter>();
+const UploadDropzoneComponent = generateUploadDropzone<CustomFileRouter>();
 
 export function UploadDropzone({
     className,
