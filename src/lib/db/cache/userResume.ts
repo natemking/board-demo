@@ -9,7 +9,7 @@ export function getUserResumeIdTag(userId: string): string {
     return getIdTag('userResumes', userId);
 }
 
-export function revalidateUserCache(userId: string): void {
+export function revalidateUserResumeCache(userId: string): void {
     revalidateTag(getUserResumeGlobalTag(), { expire: 0 })
     revalidateTag(getUserResumeIdTag(userId), { expire: 0 })
 }
