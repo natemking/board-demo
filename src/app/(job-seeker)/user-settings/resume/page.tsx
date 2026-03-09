@@ -1,12 +1,12 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import { AiSummaryCard } from 'components/AiSummaryCard';
 import { DropzoneClient } from 'components/Dropzone/DropzoneClient';
+import { Button } from 'components/shadcn/button';
 import { Card, CardContent, CardFooter } from 'components/shadcn/card';
 import { getUserResume } from 'lib/actions/userResume';
 import { getCurrentUser } from 'lib/services/clerk/getCurrentAuth';
-import { Button } from 'components/shadcn/button';
-import Link from 'next/link';
 
 export default function UserResumePage(): React.JSX.Element {
     return (
