@@ -7,6 +7,7 @@ import commentsPlugin from '@eslint-community/eslint-plugin-eslint-comments';
 import betterTailwindPlugin from 'eslint-plugin-better-tailwindcss';
 import tsdocPlugin from 'eslint-plugin-tsdoc';
 import unicornPlugin from 'eslint-plugin-unicorn';
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 const eslintConfig = defineConfig([
     ...nextVitals,
@@ -524,6 +525,7 @@ const eslintConfig = defineConfig([
         files: ['**/*.config.{js,mjs,cjs}'],
         extends: [tseslint.configs.disableTypeChecked],
     },
+    eslintConfigPrettier,
 ]);
 
 export default eslintConfig;

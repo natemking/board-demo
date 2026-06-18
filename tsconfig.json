@@ -18,7 +18,8 @@
         "name": "next"
       }
     ],
-    "baseUrl": ".",  
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
     "paths": {
       "lib/*": ["src/lib/*"],
       "env/*": ["src/lib/env/*"],
